@@ -1,9 +1,7 @@
 # yalex
 
 ```                                      
-\   /_  _| , . _    _  _ _  _  _ _ _ _  
- \)/(_)| |(  || )  |_)| (_)(_)| (-_)_) 
-                   |       _/         ascii by http://patorjk.com/software/taag/
+WORK IN PROGRESS ! ! !
 ```
 
 > yalex will be a minimalist functional scripting language for embedded systems
@@ -64,48 +62,49 @@ We can do PORT reads, writes, we can do bit trickery and we can call other funct
 
 ### Tech Tip: we ignore `,` which makes it slightly easier to write readable code
 
-## Let's investigate at what it could look like if we wanted to make a quick server
 
-Let's look at one more, here's a server:
+## List of tokens
 
-    server when requests count 0 > then
-    	'*/hello/[*]' requests 0 read url match do 
-    		1 previous hello "get the url match, contents of [*] and send to hello token which will make html"
-    	else
-    		index "default handler"
-    	done
-    end
+`a? b? (` => _start `a` block with optional name `A` and optional arg length `B`_
+	
+`a B @` => _an event `a` capture, executes block `B` on event_
 
-    server
+`(... )` => _end `a` block_
 
-## Silly brainstorming code, just to plot down some ideas while I think about this
+`a pop` => _pop `a` off the stack so if [1,2,a] then pop -> [1,2] and the pop takes value of a_
 
-```
-// This is just a PSEUDOCODE implementation brainstorm for myself
-enum default_tok {
-	begin = 0,    // structual begin
-	end, // loads of tokens here...
-	STD_TOK
-};
+`a dup` => _dublicates `a` top of stack so if [1,2,a] then dup -> [1,2,a,a]_
 
-#define DO_OR_FAIL(_OP, _ERR, _ERR_CODE) if ( ((_ERR) == NO_ERROR) && !(_OP)) _ERR = _ERR_CODE;
-// we've got one function per token
-static error read_tok(token *tok, stack *stack) {
-	error err = { .code = NO_ERROR, .token = read };
-	token *args[2];
-    token result;
-    ducktype_val read;
-	DO_OR_FAIL(stack_pop_begin(stack, args, 2), err.code, STACK_TOO_SHALLOW);
-	DO_OR_FAIL(token_is_readable(args[0]), err.code, NOT_READABLE);
-	DO_OR_FAIL(token_is_number(args[1]), err.code, NOT_A_NUMBER);
-	DO_OR_FAIL(stack_pop_commit(stack), err.code, STACK_POP_FAIL); //valid data, let's do stack manipulations
-    DO_OR_FAIL(args[0]->readWithTo(args[1]->val->number, &read) == NO_ERROR, err.code, READ_FAIL);
-    DO_OR_FAIL(token_set_number(&result, number), err.code, SET_NUMBER_FAIL);
-    DO_OR_FAIL(stack_push(stack, result), err.code, STACK_PUSH_FAIL);
-	return err;
-}
+`a peek` => _peek `a` without consuming it_
 
-// THREE HOURS LATER
-const uint8_t TOKEN_LEN = STD_TOK + USER_TOK /*room for USER_TOK tokens*/
-token tokens[TOKEN_LEN];
-tokens[5] = {.token="read", .needs=2, .action=&read_tok}```
+`a print` => _print `a` to UART/serial/stdout_
+
+`a b read` => _read value from `a` with offset or mask `b`_
+
+`a b +` => _ plus operator of `a` + `b`_
+
+`a b -` => _minus operator of `a` - `b`_
+
+`a b /` => _division of `a` / `b`_
+
+`a b *` => _multiplication of `a` * `b`_
+
+`a b >` => _is `a` greater than `b`?_
+
+`a b <` => _is `a` lesser than `b`?_
+
+`a b =` => _is `a` and `b` equal?_
+
+`a !` => _not `a`_
+
+`a b !` => _`a` is not `b`_
+
+`a b |` => _`a` or `b`_
+
+`a b &` => _`a` and `b`_
+
+`a b ^` => _`a` xor `b`_
+
+`a X Y either` => _if `a` then block `X` else block `Y`_
+
+`... x cat` => _string concatenate `x` number of values off of stack_
