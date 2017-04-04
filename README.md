@@ -1,9 +1,7 @@
 # yalex
 
 ```                                      
-\   /_  _| , . _    _  _ _  _  _ _ _ _  
- \)/(_)| |(  || )  |_)| (_)(_)| (-_)_) 
-                   |       _/         ascii by http://patorjk.com/software/taag/
+WORK IN PROGRESS ! ! !
 ```
 
 > yalex will be a minimalist functional scripting language for embedded systems
