@@ -33,3 +33,7 @@
 *.su
 
 Debug/
+.idea/
+.settings/
+.vs/
+cmake-build-debug/
