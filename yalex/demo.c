@@ -16,14 +16,12 @@ lexer lex = {.memoryBlock = memoryblock, .size = 100, .tokens= tokens};
 error err;
 stack stk;
 
-
 void main() {
     yalex_init(&err, &lex, &stk);
 
     char *msg = "12 print";
-	lexer_parse(&err, &lex, &stk, msg);
+    lexer_parse(&err, &lex, &stk, msg);
 
     yalexPrint("\r\n\r\n");
-	system("pause");
-
+    system("pause");
 }
