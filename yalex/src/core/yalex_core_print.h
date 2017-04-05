@@ -9,20 +9,21 @@
 static error print_tok(token *tok, stack *stack) {
     error err = {
             .code = NO_ERROR,
-            .token = "print"
+            .token = 0
     };
     stack_can_pop(&err, stack, 1);
     token *arg = stack_pop(&err, stack);
 
-    /*if (token->isNum) {
-        printf("%d", token->value.number);
-    }
-    if (token->isFloat) {
-        printf("%.6f", token->value.fl);
-    }
-    if (token->isStr) {
-    }*/
-    if (arg != 0) yalexPrint((char*)arg->tok);
+	if (arg != 0) {
+		if (arg->isNum) {
+			char buf[80];
+			yalftoa(arg->value.number, buf);
+			yalexPrint(buf);
+		}
+		else {
+			yalexPrint((char*)arg->tok);
+		}
+	}
     else yalexPrint("PRINT ERR");
 
     return err;

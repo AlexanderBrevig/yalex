@@ -37,3 +37,11 @@ Debug/
 .settings/
 .vs/
 cmake-build-debug/
+Makefile
+yalex.config
+yalex.creator
+yalex.creator.user
+yalex.files
+yalex.includes
+yalex.sln
+yalex.vc*

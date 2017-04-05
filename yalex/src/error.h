@@ -7,6 +7,8 @@ typedef enum _errorcode {
     STACK_POP_FAIL,
     STACK_PEEK_FAIL,
     STACK_OVERFLOW,
+	NOT_A_NUMBER,
+	OUT_OF_MEMORY,
     NULL_ERROR
 } errorcode;
 

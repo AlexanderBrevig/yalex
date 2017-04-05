@@ -19,7 +19,7 @@ stack stk;
 void main() {
     yalex_init(&err, &lex, &stk);
 
-    char *msg = "12 print";
+    char *msg = "1.2 5.7 + print"; 
     lexer_parse(&err, &lex, &stk, msg);
 
     yalexPrint("\r\n\r\n");
