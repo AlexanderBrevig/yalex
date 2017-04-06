@@ -65,21 +65,17 @@ We can do PORT reads, writes, we can do bit trickery and we can call other funct
 
 ## List of tokens
 
-`a? b? (` => _start `a` block with optional name `A` and optional arg length `B`_
-	
-`a B @` => _an event `a` capture, executes block `B` on event_
 
-`(... )` => _end `a` block_
+All entries use `a` and `b` to indicate operands to the operator. 
+Capital letters designate blocks.
+An operand is either a single token, or a block.
+... indicate a variable list of operands.
 
-`a pop` => _pop `a` off the stack so if [1,2,a] then pop -> [1,2] and the pop takes value of a_
+I use this convention for representing status:
+ * // `not imlemented yet`
+ * `implemented`
 
-`a dup` => _dublicates `a` top of stack so if [1,2,a] then dup -> [1,2,a,a]_
-
-`a peek` => _peek `a` without consuming it_
-
-`a print` => _print `a` to UART/serial/stdout_
-
-`a b read` => _read value from `a` with offset or mask `b`_
+### Math
 
 `a b +` => _ plus operator of `a` + `b`_
 
@@ -95,16 +91,45 @@ We can do PORT reads, writes, we can do bit trickery and we can call other funct
 
 `a b =` => _is `a` and `b` equal?_
 
-`a !` => _not `a`_
+// `a !` => _not `a`_
 
-`a b !` => _`a` is not `b`_
+// `a b !` => _`a` is not `b`_
 
-`a b |` => _`a` or `b`_
+// `a b |` => _`a` or `b`_
 
-`a b &` => _`a` and `b`_
+// `a b &` => _`a` and `b`_
 
-`a b ^` => _`a` xor `b`_
+// `a b ^` => _`a` xor `b`_
 
-`a X Y either` => _if `a` then block `X` else block `Y`_
+### Stack operations
 
-`... x cat` => _string concatenate `x` number of values off of stack_
+`a pop` => _pop `a` off the stack so if [1,2,a] then pop -> [1,2] and the pop takes value of a_
+
+`a dup` => _dublicates `a` top of stack so if [1,2,a] then dup -> [1,2,a,a]_
+
+`a rot` => _rotate the stack so if [1,2,3] then [3,2,1]_
+
+### Data manipulation
+
+// `a b set` => _set the value of `a` to the value of `b`_
+
+// `a b read` => _read value from `a` with bit mask `b`_
+
+// `a b write` => _write value to `a` with bit mask `b`_
+
+// `a b index` => _indexes a by b places, similar to `a[b]` can be followed by a set_
+
+// `... x cat` => _string concatenate `x` number of values off of stack_
+
+### yalex specific
+
+`a print` => _print `a` to UART/radio/stdout_
+
+// `a? b? (` => _start a block with optional name `a` and optional arg length `b`_
+
+// `... )` => _end a block_
+
+// `a B when` => _when event `a` is captured then block `B` is executed_
+
+// `a X Y either` => _if `a` then block `X` else block `Y`_
+
