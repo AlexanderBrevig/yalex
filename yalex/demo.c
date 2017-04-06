@@ -12,16 +12,42 @@ void yalexPrint(const char * format){
 
 token memoryblock[100]; //memory size
 token tokens[BUILTIN_TOKENS];
-lexer lex = {.memoryBlock = memoryblock, .size = 100, .tokens= tokens};
-error err;
+lexer lex = {.variables = memoryblock, .size = 100, .tokens= tokens};
 stack stk;
+error err;
+
+void yalex_run(char *program){
+    error errlocal;
+    error_init(&errlocal);
+    lexer_parse(&errlocal, &lex, &stk, program);
+}
 
 void main() {
     yalex_init(&err, &lex, &stk);
 
-    char *msg = "1.2 5.7 + print"; 
-    lexer_parse(&err, &lex, &stk, msg);
-
-    yalexPrint("\r\n\r\n");
-    system("pause");
+    char *programs[] = {
+        "test print",
+        "1 2 + print",
+        "-1 2 + print",
+        "1 2 - print",
+        "2 1 - print",
+        "1 2 / print",
+        "2 1 / print",
+        "2 0 / print",
+        "2 3 * print",
+        "3 2 * print", //10
+        "2 0 * print",
+        "1 2 < print",
+        "2 1 < print",
+        "2 1 > print",
+        "1 2 > print",
+        "2 2 = print",
+        "2 1 = print",
+        "2 dup + print",
+        "1 2 pop print"
+    };
+    for (int i=16; i<19; i++){
+        yalex_run(programs[i]);
+        system("pause");
+    }
 }

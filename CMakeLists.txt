@@ -8,6 +8,6 @@ set(SOURCE_FILES
         yalex/unity/unity.c
         yalex/unity/unity.h
         yalex/unity/unity_internals.h
-        yalex/demo.c yalex/src/token.h yalex/src/stack.h yalex/src/error.h yalex/src/stack.c yalex/src/token.c yalex/src/lexer.h yalex/src/lexer.c yalex/src/error.c yalex/src/yalex_core.h yalex/src/yalex_util.h yalex/src/core/yalex_core_print.h)
+        yalex/demo.c yalex/src/token.h yalex/src/stack.h yalex/src/error.h yalex/src/stack.c yalex/src/token.c yalex/src/lexer.h yalex/src/lexer.c yalex/src/error.c yalex/src/yalex_core.h yalex/src/yalex_util.h yalex/src/core/yalex_core_print.h yalex/src/core/yalex_core_dup.h yalex/src/core/yalex_core_pop.h yalex/src/core/yalex_core_minus.h yalex/src/core/yalex_core_divide.h yalex/src/core/yalex_core_equals.h yalex/src/core/yalex_core_greaterthan.h yalex/src/core/yalex_core_multiply.h yalex/src/core/yalex_core_lessthan.h)
 
 add_executable(yalex ${SOURCE_FILES})

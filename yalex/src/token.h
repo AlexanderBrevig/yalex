@@ -24,8 +24,11 @@ typedef struct _token {
 	uint8_t isBuiltin;
 } token;
 
+static token token_true;
+static token token_false;
+
 typedef error (*token_handler)(token *, stack *);
 void token_init(error *err, token *tok, const char *name, token_handler tok_handler);
 void token_deinit(token *tok);
-
+token *token_search(token *tokens, uint16_t size, char *buff);
 #endif

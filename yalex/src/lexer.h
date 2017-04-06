@@ -9,7 +9,7 @@
 
 typedef struct _lexer {
     token *tokens;
-    token *memoryBlock;
+    token *variables;
     uint16_t size;
 } lexer;
 

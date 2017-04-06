@@ -1,79 +1,53 @@
 #include <ctype.h>
+#include <stdlib.h>
 #include "lexer.h"
 #include "yalex_core.h"
 
-token *lexer_search(lexer *lex, char *buff) {
-	int i = 0;
-	// search builtin tokens
-	for (i = 0; i < BUILTIN_TOKENS; i++) {
-		if (lex->tokens[i].tok[0] != 0) {
-			char *tok = &lex->tokens[i].tok[0];
-			char *buf = &buff[0];
-			while (*tok == *buf && *tok != 0 && *buf != ' ') {
-				tok++;
-				buf++;
-			}
-			tok--;
-			buf--;
-			if (*tok == *buf) {
-				return &lex->tokens[i];
-			}
-		}
-	}
-	//search user tokens
-	for (i = 0; i < lex->size; i++) {
-		if (lex->memoryBlock[i].tok != 0) {
-			char *tok = &lex->memoryBlock[i].tok[0];
-			char *buf = &buff[0];
-			while (*tok == *buf && *tok != 0 && *buf != ' ') {
-				tok++;
-				buf++;
-			}
-			tok--; 
-			buf--;
-			if (*tok == *buf) {
-				return &lex->memoryBlock[i];
-			}
-		}
-	}
-	return 0;
-}
 
 void lexer_init(error *err, lexer *lex) {
 	for (int i = 0; i < BUILTIN_TOKENS; i++) {
 		token_deinit(&lex->tokens[i]);
 	}
 	for (int j = 0; j < lex->size; j++) {
-		token_deinit(&lex->memoryBlock[j]);
+		token_deinit(&lex->variables[j]);
 	}
 	registerCore(err, lex);
 }
 
-void lexer_parse(error *err, lexer *lex, stack *stk, char *input) {
-	char buffer[128];
-	int i = 0;
+void lexer_parse(error *err, lexer *lex, stack *stk, char *program) {
+	err->program = program;
+	char needle[128];
+    uint16_t i = 0;
+    uint16_t loc = 0;
+    char *input = &program[0];
 	while (1) {
-		if (*input != ' ' && *input != 0) {
-			buffer[i] = *input;
-			buffer[i + 1] = 0;
+		if (*input != ' ' && *input != 0 && i<127) {
+			needle[i] = *input;
+			needle[i + 1] = 0;
 			i++;
+            loc++;
 		}
 		else  {
-			token *tok = lexer_search(lex, buffer);
+            /// search build in tokens for our current needle
+			token *tok = token_search(lex->tokens, BUILTIN_TOKENS, needle);
+            if (tok == 0){
+                /// search user variables for our current needle
+                tok = token_search(lex->variables, lex->size, needle);
+            }
 			uint8_t newToken = 0;
 			if (tok == 0)
 			{
 				// find available mem
 				for (int j = 0; j < lex->size && tok == 0; j++) {
-					if (lex->memoryBlock[j].tok[0] == 0) {
-						tok = &lex->memoryBlock[j];
+					if (lex->variables[j].tok[0] == 0) {
+						tok = &lex->variables[j];
 					}
 				}
 				if (tok != 0) {
-					token_init(err, tok, buffer, 0);
-					if (isdigit(buffer[0]) || buffer[0] == '-') {
+					token_init(err, tok, needle, (void*)0);
+					if (isdigit(needle[0]) || needle[0] == '-') {
 						tok->isNum = 1;
-						tok->value.number = (float)atof(buffer);
+						tok->value.number = (float)atof(needle);
 					}
 					else {
 						tok->isStr = 1;
@@ -86,23 +60,23 @@ void lexer_parse(error *err, lexer *lex, stack *stk, char *input) {
 				}
 			}
 			else {
-				// add exisisnt
 				stack_push(err, stk, tok);
 				newToken = 1;
 			}
 			if (newToken == 1) {
 				tok = stack_peek(err, stk);
-				if (tok != 0 && tok->action != 0) {
+				if (err->code == NO_ERROR && tok != 0 && tok->action != 0) {
 					tok = stack_pop(err, stk);
 					token_handler handl = (token_handler)tok->action;
-					(*handl)(tok, stk);
-				}
-				if (err->code != NO_ERROR) {
-					printf(" error %d ", err->code);
-					yalexPrint("ERROR: ");
-					//yalexPrint(err->code);
+					error error = (*handl)(tok, stk);
+                    err->code = error.code;
+                    err->token = error.token;
 				}
 			}
+            err->loc = loc - 1;
+            if (error_print(err) != NO_ERROR) {
+                return;
+            }
 			i = 0;
 			if (*input == 0) return;
 		}

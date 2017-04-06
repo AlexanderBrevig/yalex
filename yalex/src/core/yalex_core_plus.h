@@ -12,21 +12,36 @@ static error plus_tok(token *tok, stack *stack) {
 			.token = 0
 	};
 	stack_can_pop(&err, stack, 2);
-	//TODO: check num
 	token *arg1 = stack_pop(&err, stack);
 	token *arg2 = stack_pop(&err, stack);
-	if (err.code == NO_ERROR && arg1->isNum != 1) { err.code = NOT_A_NUMBER; err.token = 1; }
-	if (err.code == NO_ERROR && arg1->isNum != 1) { err.code = NOT_A_NUMBER; err.token = 2; }
+	if (err.code == NO_ERROR && arg1->isNum != 1) {
+        err.code = NOT_A_NUMBER;
+        err.token = (void*)1;
+        return err;
+    }
+	if (err.code == NO_ERROR && arg2->isNum != 1) {
+        err.code = NOT_A_NUMBER;
+        err.token = (void*)2;
+        return err;
+    }
 	if (err.code == NO_ERROR) {
+        YDBG("DEBUG> ");
+        YDBG(arg2->tok);
+        YDBG(" ");
+        YDBG(arg1->tok);
+        YDBG(" plus -> ");
 		float res = arg1->value.number + arg2->value.number;
 		token_deinit(arg1);
 		token_deinit(arg2);
 		char buf[80];
 		yalftoa(res, buf);
 		token_init(&err, arg1, buf, 0);
+        YDBG(arg1->tok);
+        YDBGLN("");
 		arg1->isNum = 1;
 		arg1->value.number = res;
 		stack_push(&err, stack, arg1);
+
 	}
     return err;
 }
