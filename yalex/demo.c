@@ -44,9 +44,10 @@ void main() {
         "2 2 = print",
         "2 1 = print",
         "2 dup + print",
-        "1 2 pop print"
+        "1 2 pop print",
+        "1 2 3 rot print"
     };
-    for (int i=16; i<19; i++){
+    for (int i=19; i<20; i++){
         yalex_run(programs[i]);
         system("pause");
     }

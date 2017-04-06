@@ -17,6 +17,7 @@
 
 #include "core/yalex_core_dup.h"
 #include "core/yalex_core_pop.h"
+#include "core/yalex_core_rot.h"
 
 enum {
     /*YALEX*/
@@ -40,6 +41,7 @@ enum {
     /*STACK OPERATIONS*/
     DUP,
     POP,
+    ROT,
 
 	BUILTIN_END
 };
@@ -77,6 +79,7 @@ void registerMath(error *err, lexer *lex){
 void registerStackops(error *err, lexer *lex){
     token_init(err, &lex->tokens[DUP], "dup", &dup_tok);
     token_init(err, &lex->tokens[POP], "pop", &pop_tok);
+    token_init(err, &lex->tokens[ROT], "rot", &rot_tok);
 }
 
 void registerYalex(error *err, lexer *lex){
