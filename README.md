@@ -18,9 +18,7 @@ So, let's get right to it! Here's the hello world:
 
 ## The hello world program
 
-    hw begin
     'hello world' print
-    end
     
 Call this program some time later by simply issuing this token to the stack ` hw ` and you'll be the hero for printing out this fine text.
 
@@ -31,40 +29,27 @@ We are legion. We are many. Expect us.
 ## Define a function that takes 1 argument
 
     "sleep an amount of ms, be sure to prepare stack with at least 1 value"
-    sleepms 1 begin pop delayms end
+    sleepms 1 ( pop delayms )
     
-### Tech Tip: Whitespace does not matter but double quotes does
-' is better than " do you know why? One less key to press! Double quoted strings serves as comments, and if they appear above a token that is `begin`ed or `when`ed, it serves as its documentation.
+## Peripheral interface
 
-Oh did I mention it ignores whitespaces outside;
-```
-'string 
+We can do PORT reads, writes, we can do bit trickery and we can call other functions. This depends on the particular Board Support Package you're running. For this example I assume that PORTA is exposed and handles a port write for the microcontroller.
 
-literals'?
-``` 
-You can still format those RAW HTTP responses if you want to :)
+    "blink two leds in a loop"
+    (
+        PORTA 0b11 PORTA 0b11 read ! write 
+        1000 sleepms 
+    ) loop
 
-## Peripheral interface!
+## Control structures
 
-We can do PORT reads, writes, we can do bit trickery and we can call other functions.
+    errors 0 = ( 'no errors' print ) ( errors ' errors' 2 cat print ) ?
 
-    blinky begin
-    PORTA 0b11 PORTA 0b11 read not write "blink two leds at a time"
-    1000 sleepms
-    repeat "this means it's looping"
+## Event handler
 
-### Tech Tip: you can use PORT and pin mask, or a digit and make it a pin
-
-    "if any pin on port C is HIGH, toggle pin 13"
-    toggleLed when PORTC 0xff read 0 > then 
-        13 pin, 13 pin read toggle, write
-    end 
-
-### Tech Tip: we ignore `,` which makes it slightly easier to write readable code
-
+    errors 2 > ( PORTA LED_RED 1 write ) when
 
 ## List of tokens
-
 
 All entries use `a` and `b` to indicate operands to the operator. 
 Capital letters designate blocks.
@@ -103,11 +88,13 @@ I use this convention for representing status:
 
 ### Stack operations
 
-`a pop` => _pop `a` off the stack so if [1,2,a] then pop -> [1,2] and the pop takes value of a_
+`a pop` => _pop `a` off the stack so if [1,2,a] then pop -> [1,2]_
 
 `a dup` => _dublicates `a` top of stack so if [1,2,a] then dup -> [1,2,a,a]_
 
-`a rot` => _rotate the stack so if [1,2,3] then [3,2,1]_
+`... clr` => _clears the stack so if [1,2,a] then clr -> []_
+
+`a rot` => _rotate the stack so if [1,2,3] then rot -> [3,2,1]_
 
 ### Data manipulation
 
@@ -125,11 +112,21 @@ I use this convention for representing status:
 
 `a print` => _print `a` to UART/radio/stdout_
 
+`true` => _a truthy value of 1.0f_
+
+`false` => _a falsy value of 0.0f_
+
+// `nop` => _no operation, empty dummy token (for explicit I DON'T WANT ANYTHING HERE)_
+
 // `a? b? (` => _start a block with optional name `a` and optional arg length `b`_
 
 // `... )` => _end a block_
 
 // `a B when` => _when event `a` is captured then block `B` is executed_
 
-// `a X Y either` => _if `a` then block `X` else block `Y`_
+// `a X Y ?` => _if `a` then block `X` else block `Y`_
+
+// `A loop` => _loop block `A` until it is `kill`ed_
+
+// `a kill` => _kill variable `a` if it is user specified, builtins cannot be deleted_
 
