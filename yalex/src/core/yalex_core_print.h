@@ -29,7 +29,7 @@ static error print_tok(token *tok, stack *stack) {
 			yalexPrint((char*)arg->tok);
 		}
         yalexPrintln();
-	} 
+	}
 
     return err;
 }

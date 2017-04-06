@@ -27,6 +27,8 @@ void main() {
 
     char *programs[] = {
         "test print",
+        "b 1 + print",
+        "1 a + print",
         "1 2 + print",
         "-1 2 + print",
         "1 2 - print",
@@ -49,7 +51,7 @@ void main() {
         "1 2 3 rot clr print",
         0
     };
-    for (int i=20; programs[i] != 0; i++){
+    for (int i=1; programs[i] != 0; i++){
         yalex_run(programs[i]);
         system("pause");
     }
