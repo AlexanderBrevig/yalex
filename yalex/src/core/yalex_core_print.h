@@ -14,10 +14,11 @@ static error print_tok(token *tok, stack *stack) {
     stack_can_pop(&err, stack, 1);
     token *arg = stack_pop(&err, stack);
 
-	if (err.code != NO_ERROR){
-		error_print(&err);
-	}
-	else if (arg != 0) {
+	if (arg != 0) {
+        YDBG("print tok ");
+        YDBG(arg->tok);
+        YDBGLN("");
+
         YALEXPRT();
 		if (arg->isNum) {
 			char buf[80];
@@ -28,7 +29,7 @@ static error print_tok(token *tok, stack *stack) {
 			yalexPrint((char*)arg->tok);
 		}
         yalexPrintln();
-	}
+	} 
 
     return err;
 }
