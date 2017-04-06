@@ -3,7 +3,7 @@
 #include "yalex_util.h"
 
 #define DBGSTACK() \
-    YDBG("STACK: "); \
+    YDBG("STACK ");  \
     for (int i=1; i <= stk->currentIndex; i++){ \
         YDBG(stk->stack[i]->tok); \
         YDBG(" "); \

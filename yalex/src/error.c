@@ -11,22 +11,20 @@ errorcode error_print(error *err){
     if (err->code != NO_ERROR) {
         char buf[128];
         int begin = 0;
-        int tokenBegin = 0;
-        int tokenEnd = err->loc;
+        int tokenEnd = 0;
+        int tokenBegin = err->loc;
+        char currentChar = 0;
+        do {
+            currentChar = err->program[err->loc + (begin)];
+            buf[begin] = currentChar;
+            begin++;
+        } while (currentChar != 0 && currentChar != ' ');
 
-        while(err->program[err->loc + (begin--)] != ' '){  }
-        begin+=2;
-        tokenBegin = err->loc + begin;
-
-        uint16_t i = 0;
-        while(err->program[err->loc + begin] != ' '){
-            buf[i++] = err->program[err->loc + begin++];
-        }
-        buf[i] = 0;
+        tokenEnd = err->loc + begin;
 
         YALEXPRT();
         yalexPrint(buf);
-        yalexPrint(" is ");
+        yalexPrint(" makes ");
         yalexPrint(errors[err->code]);
         itoa(tokenBegin, buf, 10);
         yalexPrint(" at index ");
@@ -47,6 +45,7 @@ errorcode error_print(error *err){
             }
             idx++;
         }
+        yalexPrintln();
     }
     return err->code;
 }

@@ -73,7 +73,7 @@ void lexer_parse(error *err, lexer *lex, stack *stk, char *program) {
                     err->token = error.token;
 				}
 			}
-            err->loc = loc - 1;
+            err->loc = loc;
             if (error_print(err) != NO_ERROR) {
                 return;
             }
