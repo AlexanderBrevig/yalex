@@ -20,7 +20,7 @@ static error print_tok(token *tok, stack *stack) {
         YDBGLN("");
 
         YALEXPRT();
-		if (arg->isNum) {
+		if (arg->isNum && arg != &token_true && arg != &token_false) {
 			char buf[80];
 			yalftoa(arg->value.number, buf);
 			yalexPrint(buf);
