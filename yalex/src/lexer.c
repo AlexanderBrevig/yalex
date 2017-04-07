@@ -68,7 +68,7 @@ void lexer_parse(error *err, lexer *lex, stack *stk, char *program) {
 				if (err->code == NO_ERROR && tok != 0 && tok->action != 0) {
 					tok = stack_pop(err, stk);
 					token_handler handl = (token_handler)tok->action;
-					error error = (*handl)(tok, stk);
+					error error = (*handl)(0, stk);
                     err->code = error.code;
                     err->token = error.token;
 				}

@@ -26,33 +26,48 @@ void main() {
     yalex_init(&err, &lex, &stk);
 
     char *programs[] = {
-        "test print",
-        "b 1 + print",
-        "1 a + print",
-        "1 2 + print",
-        "-1 2 + print",
-        "1 2 - print",
-        "2 1 - print",
-        "1 2 / print",
-        "2 1 / print",
-        "2 0 / print",
-        "2 3 * print",
-        "3 2 * print", //10
-        "2 0 * print",
+        "0 0 & print",
+        "1 0 & print",
+        "0 1 & print",
+        "1 1 & print",
+        "3 6 & print",
+        "1 a & print",
+        "3 4 | print",
+        "0 0 | print",
+        "1 0 | print",
+        "0 1 | print",
+        "1 1 | print",
+        "1 a | print",
+        "2 ! ! print",
+        "2 ! print",
+        "1 2 3 rot clr print",
+        "1 2 3 rot print",
+        "1 2 pop print",
+        "2 dup + print",
+        "2 2 = print",
+        "2 1 = print",
         "1 2 < print",
         "2 1 < print",
         "2 1 > print",
         "1 2 > print",
-        "2 2 = print",
-        "2 1 = print",
-        "2 dup + print",
-        "1 2 pop print",
-        "1 2 3 rot print",
-        "1 2 3 rot clr print",
+        "2 3 * print",
+        "3 2 * print",
+        "2 0 * print",
+        "1 2 / print",
+        "2 1 / print",
+        "2 0 / print",
+        "1 2 - print",
+        "2 1 - print",
+        "b 1 + print",
+        "1 a + print",
+        "1 2 + print",
+        "-1 2 + print",
+        "test print",
         0
     };
-    for (int i=1; programs[i] != 0; i++){
+    for (int i=0; programs[i] != 0; i++){
         yalex_run(programs[i]);
+        printf("\r\n_____\r\n");
         system("pause");
     }
 }

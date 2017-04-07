@@ -10,7 +10,7 @@ static error pop_tok(token *tok, stack *stack) {
             .code = NO_ERROR,
             .token = 0
     };
-    stack_can_pop(&err, stack, 1);
+    stack_assert_depth(&err, stack, 1);
     if (err.code == NO_ERROR) {
         stack_pop(&err, stack);
     }

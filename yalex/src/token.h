@@ -31,4 +31,9 @@ typedef error (*token_handler)(token *, stack *);
 void token_init(error *err, token *tok, const char *name, token_handler tok_handler);
 void token_deinit(token *tok);
 token *token_search(token *tokens, uint16_t size, char *buff);
+
+uint8_t token_assert_num(error *err, token *tok);
+
+void token_clear_type(token *tok);
+void token_set_num(token *tok, float num);
 #endif

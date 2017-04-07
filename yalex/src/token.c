@@ -47,3 +47,19 @@ token *token_search(token *tokens, uint16_t size, char *buff) {
     }
     return 0;
 }
+
+uint8_t token_assert_num(error *err, token *tok) {
+    if (tok == 0 || tok->isNum == 0){
+        err->code = NOT_A_NUMBER;
+    }
+    return err->code;
+}
+
+void token_clear_type(token *tok){
+    tok->isNum = tok->isBuiltin = tok->isStr = tok->isArray = 0;
+}
+
+void token_set_num(token *tok, float num){
+    tok->isNum = 1;
+    tok->value.number = num;
+}

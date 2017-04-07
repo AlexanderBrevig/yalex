@@ -16,7 +16,7 @@ typedef struct _stack {
 } stack;
 
 void stack_init(error *err, stack *stk);
-void stack_can_pop(error *err, stack *stk, int argc);
+void stack_assert_depth(error *err, stack *stk, int argc);
 token *stack_pop(error *err, stack *stk);
 token *stack_peek(error *err, stack *stk);
 void stack_push(error *err, stack *stk, token *tok);

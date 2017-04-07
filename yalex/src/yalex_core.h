@@ -14,6 +14,9 @@
 #include "core/yalex_core_lessthan.h"
 #include "core/yalex_core_greaterthan.h"
 #include "core/yalex_core_equals.h"
+#include "core/yalex_core_not.h"
+#include "core/yalex_core_or.h"
+#include "core/yalex_core_and.h"
 
 #include "core/yalex_core_dup.h"
 #include "core/yalex_core_pop.h"
@@ -34,6 +37,8 @@ enum {
     LESSTHAN,
     GREATERTHAN,
     EQUALS,
+    NOT,
+    AND,
     //SIN,
     //COS,
     //SQRT,
@@ -76,6 +81,9 @@ void registerMath(error *err, lexer *lex){
     token_init(err, &lex->tokens[LESSTHAN], "<", &lessthan_tok);
     token_init(err, &lex->tokens[GREATERTHAN], ">", &greaterthan_tok);
     token_init(err, &lex->tokens[EQUALS], "=", &equals_tok);
+    token_init(err, &lex->tokens[NOT], "!", &not_tok);
+    token_init(err, &lex->tokens[NOT], "|", &or_tok);
+    token_init(err, &lex->tokens[AND], "&", &and_tok);
 }
 
 void registerStackops(error *err, lexer *lex){

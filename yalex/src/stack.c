@@ -16,8 +16,12 @@ void stack_init(error *err, stack *stk){
 	for (int i = 0; i < YALEX_STACK_SIZE; i++) { stk->stack[i] = 0; }
 }
 
-void stack_can_pop(error *err, stack *stk, int argc) {
+void stack_assert_depth(error *err, stack *stk, int argc) {
     if (err->code != NO_ERROR) {
+        return;
+    }
+    if (stk == 0){
+        err->code = NULL_POINTER_EXCEPTION;
         return;
     }
     if (stk->currentIndex < argc){
@@ -43,6 +47,10 @@ token *stack_pop(error *err, stack *stk) {
 }
 
 token *stack_peek(error *err, stack *stk) {
+    if (stk == 0){
+        err->code = NULL_POINTER_EXCEPTION;
+        return 0;
+    }
     uint16_t idx = stk->currentIndex;
     if (err->code != NO_ERROR) {
         return 0;

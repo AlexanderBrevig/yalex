@@ -12,7 +12,7 @@ static error equals_tok(token *tok, stack *stack) {
             .code = NO_ERROR,
             .token = 0
     };
-    stack_can_pop(&err, stack, 2);
+    stack_assert_depth(&err, stack, 2);
     token *arg2 = stack_pop(&err, stack);
     token *arg1 = stack_pop(&err, stack);
     if (err.code == NO_ERROR) {

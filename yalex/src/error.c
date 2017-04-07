@@ -49,13 +49,13 @@ errorcode error_print(error *err){
         int16_t idx = 0;
         while(err->program[idx] != 0){
             if (idx == tokenBegin) {
-                yalexPrint("b");
+                yalexPrint("{");
             }
             char buf[2] = " ";
             buf[0] = err->program[idx];
             yalexPrint(buf);
             if (idx == tokenEnd) {
-                yalexPrint("e");
+                yalexPrint("}");
             }
             idx++;
         }
