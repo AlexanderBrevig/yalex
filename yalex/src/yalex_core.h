@@ -18,6 +18,7 @@
 #include "core/yalex_core_boolean.h"
 #include "core/yalex_core_or.h"
 #include "core/yalex_core_and.h"
+#include "core/yalex_core_xor.h"
 
 #include "core/yalex_core_dup.h"
 #include "core/yalex_core_pop.h"
@@ -42,6 +43,7 @@ enum {
     BOOLEAN,
     AND,
     OR,
+    XOR,
     //SIN,
     //COS,
     //SQRT,
@@ -88,6 +90,7 @@ void registerMath(error *err, lexer *lex){
     token_init(err, &lex->tokens[BOOLEAN], "?", &boolean_tok);
     token_init(err, &lex->tokens[OR], "|", &or_tok);
     token_init(err, &lex->tokens[AND], "&", &and_tok);
+    token_init(err, &lex->tokens[XOR], "^", &xor_tok);
 }
 
 void registerStackops(error *err, lexer *lex){
