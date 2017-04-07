@@ -14,7 +14,8 @@
 #include "core/yalex_core_lessthan.h"
 #include "core/yalex_core_greaterthan.h"
 #include "core/yalex_core_equals.h"
-#include "core/yalex_core_not.h"
+#include "core/yalex_core_not_equals.h"
+#include "core/yalex_core_boolean.h"
 #include "core/yalex_core_or.h"
 #include "core/yalex_core_and.h"
 
@@ -34,11 +35,13 @@ enum {
     MINUS,
     DIVIDE,
     MULTIPLY,
-    LESSTHAN,
-    GREATERTHAN,
+    LESS_THAN,
+    GREATER_THAN,
     EQUALS,
-    NOT,
+    NOT_EQUALS,
+    BOOLEAN,
     AND,
+    OR,
     //SIN,
     //COS,
     //SQRT,
@@ -78,11 +81,12 @@ void registerMath(error *err, lexer *lex){
     token_init(err, &lex->tokens[MINUS], "-", &minus_tok);
     token_init(err, &lex->tokens[DIVIDE], "/", &divide_tok);
     token_init(err, &lex->tokens[MULTIPLY], "*", &multiply_tok);
-    token_init(err, &lex->tokens[LESSTHAN], "<", &lessthan_tok);
-    token_init(err, &lex->tokens[GREATERTHAN], ">", &greaterthan_tok);
+    token_init(err, &lex->tokens[LESS_THAN], "<", &lessthan_tok);
+    token_init(err, &lex->tokens[GREATER_THAN], ">", &greaterthan_tok);
     token_init(err, &lex->tokens[EQUALS], "=", &equals_tok);
-    token_init(err, &lex->tokens[NOT], "!", &not_tok);
-    token_init(err, &lex->tokens[NOT], "|", &or_tok);
+    token_init(err, &lex->tokens[NOT_EQUALS], "!", &not_equals_tok);
+    token_init(err, &lex->tokens[BOOLEAN], "?", &boolean_tok);
+    token_init(err, &lex->tokens[OR], "|", &or_tok);
     token_init(err, &lex->tokens[AND], "&", &and_tok);
 }
 

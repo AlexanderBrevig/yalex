@@ -6,20 +6,20 @@
 #include "../stack.h"
 #include "../yalex_util.h"
 
-static error not_tok(token *tok, stack *stack) {
+static error boolean_tok(token *tok, stack *stack) {
     error err = {
             .code = NO_ERROR,
             .token = 0
     };
     stack_assert_depth(&err, stack, 1);
-    token *num = stack_peek(&err, stack);
+    token *num = stack_pop(&err, stack);
     token_assert_num(&err, num);
     if (err.code == NO_ERROR || tok != 0){
         if (tok != 0) {
             num = tok;
         }
         if (num != 0) {
-            num->value.number = num->value.number == 0 ? 1 : 0;
+            stack_push(&err, stack, num->value.number == 0 ? &token_false : &token_true);
         }
     }
     return err;

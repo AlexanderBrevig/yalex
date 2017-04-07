@@ -5,7 +5,7 @@
 #include "../token.h"
 #include "../stack.h"
 #include "../yalex_util.h"
-#include "yalex_core_not.h"
+#include "yalex_core_boolean.h"
 
 static error and_tok(token *tok, stack *stack) {
     error err = {

@@ -25,7 +25,9 @@ static const char * const errors[NUMBER_OF_ERRORS] = {
     "STACK_OVERFLOW",
     "NOT_A_NUMBER",
     "OUT_OF_MEMORY",
-    "NULL_POINTER_EXCEPTION"
+    "NULL_POINTER_EXCEPTION",
+	"DIVIDE_BY_ZERO",
+	"UNEXPECTED_TYPE",
 };
 
 typedef struct _error {

@@ -26,6 +26,12 @@ void main() {
     yalex_init(&err, &lex, &stk);
 
     char *programs[] = {
+        "0 0 ! print",
+        "1 0 ! print",
+        "0 1 ! print",
+        "1 1 ! print",
+        "3 6 ! print",
+        "1 a ! print",
         "0 0 & print",
         "1 0 & print",
         "0 1 & print",
@@ -38,8 +44,8 @@ void main() {
         "0 1 | print",
         "1 1 | print",
         "1 a | print",
-        "2 ! ! print",
-        "2 ! print",
+        "2 ? ? print",
+        "2 ? print",
         "1 2 3 rot clr print",
         "1 2 3 rot print",
         "1 2 pop print",
