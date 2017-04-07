@@ -55,6 +55,10 @@ enum {
     ROT,
     CLR,
 
+    TRUE,
+    FALSE,
+    NOP,
+
 	BUILTIN_END
 };
 void registerConsts(error *err, lexer *lex);
@@ -72,10 +76,16 @@ void registerCore(error *err, lexer *lex){
 
 void registerConsts(error *err, lexer *lex){
     token_init(err, &token_true, "true", 0);
-    token_true.isBuiltin = 1; token_true.value.number = 1;
+    token_set_num(&token_true, 1);
+    lex->tokens[TRUE]= token_true;
 
     token_init(err, &token_false, "false", 0);
-    token_false.isBuiltin = 1; token_false.value.number = 0;
+    token_set_num(&token_false, 0);
+    lex->tokens[FALSE]= token_false;
+
+    token_init(err, &token_nop, "nop", 0);
+    token_false.isBuiltin = 1; token_false.value.voidptr = 0;
+    lex->tokens[NOP]= token_nop;
 }
 
 void registerMath(error *err, lexer *lex){

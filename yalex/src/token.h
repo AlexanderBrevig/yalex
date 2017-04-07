@@ -26,6 +26,7 @@ typedef struct _token {
 
 static token token_true;
 static token token_false;
+static token token_nop;
 
 typedef error (*token_handler)(token *, stack *);
 void token_init(error *err, token *tok, const char *name, token_handler tok_handler);

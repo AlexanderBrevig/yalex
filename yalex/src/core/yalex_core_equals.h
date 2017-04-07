@@ -38,6 +38,7 @@ static error equals_tok(token *tok, stack *stack) {
                 err.code = UNEXPECTED_TYPE;
             }
         }
+        error dummy_err;
         if (arg1->isBuiltin){
             foundType = 1;
             if (arg2->isBuiltin){
@@ -47,9 +48,9 @@ static error equals_tok(token *tok, stack *stack) {
             }
         }
 
-        if (arg1->isNum){
+        if (token_assert_num(&dummy_err, arg1) == NO_ERROR){
             foundType = 1;
-            if (arg2->isNum){
+            if (token_assert_num(&dummy_err, arg2) == NO_ERROR){
                 float a = arg1->value.number;
                 float b = arg2->value.number;
                 float delta = a - b;
