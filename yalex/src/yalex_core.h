@@ -5,6 +5,7 @@
 #include "lexer.h"
 
 #include "core/yalex_core_print.h"
+#include "core/yalex_core_nop.h"
 
 
 #include "core/yalex_core_plus.h"
@@ -114,6 +115,7 @@ void registerYalex(error *err, lexer *lex){
     //token_init(err, &lex->tokens[BEGIN], "(", &begin_tok);
     //token_init(err, &lex->tokens[END], ")", &end_tok);
     token_init(err, &lex->tokens[PRINT], "print", &print_tok);
+    token_init(err, &lex->tokens[NOP], "nop", &nop_tok);
 }
 
 #endif

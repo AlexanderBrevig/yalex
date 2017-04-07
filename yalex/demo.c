@@ -26,6 +26,7 @@ void main() {
     yalex_init(&err, &lex, &stk);
 
     char *programs[] = {
+        "1 nop print",
         "true false & print",
         "10 5 ^ print",
         "0 0 ^ print",
