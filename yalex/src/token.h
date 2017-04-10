@@ -31,6 +31,7 @@ static token token_nop;
 typedef error (*token_handler)(token *, stack *);
 void token_init(error *err, token *tok, const char *name, token_handler tok_handler);
 void token_deinit(token *tok);
+void token_copy_into(token *from, token *to);
 token *token_search(token *tokens, uint16_t size, char *buff);
 
 uint8_t token_assert_num(error *err, token *tok);

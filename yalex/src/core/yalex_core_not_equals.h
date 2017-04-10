@@ -20,7 +20,7 @@ static error not_equals_tok(token *tok, stack *stack) {
         YDBG(arg2->tok);
         YDBG(" ");
         YDBG(arg1->tok);
-        YDBG(" equals -> ");
+        YDBG(" not equals -> ");
 
         float isEqual = 0;
         uint8_t foundType = 0;
@@ -46,10 +46,10 @@ static error not_equals_tok(token *tok, stack *stack) {
                 err.code = UNEXPECTED_TYPE;
             }
         }
-
-        if (arg1->isNum){
+        error dummy_err;
+        if (token_assert_num(&dummy_err, arg1) == NO_ERROR){
             foundType = 1;
-            if (arg2->isNum){
+            if (token_assert_num(&dummy_err, arg2) == NO_ERROR){
                 float a = arg1->value.number;
                 float b = arg2->value.number;
                 float delta = a - b;
@@ -61,7 +61,7 @@ static error not_equals_tok(token *tok, stack *stack) {
         if (foundType){
             token_deinit(arg1);
             token_deinit(arg2);
-            token *tok = isEqual > 0 ? &token_false : &token_true;
+            token *tok = isEqual == 0 ? &token_true: &token_false;
             YDBG(tok->tok);
             YDBGLN("");
             stack_push(&err, stack, tok);

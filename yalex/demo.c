@@ -26,6 +26,9 @@ void main() {
     yalex_init(&err, &lex, &stk);
 
     char *programs[] = {
+        "false dup 1 + = print",
+        "true dup 1 + = print",
+        "1 dup ! print",
         "1 nop print",
         "true false & print",
         "10 5 ^ print",

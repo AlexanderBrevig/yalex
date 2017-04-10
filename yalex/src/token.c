@@ -21,6 +21,24 @@ void token_deinit(token *tok) {
 	tok->isArray = tok->isStr = tok->isNum = tok->isBuiltin = 0;
 }
 
+void token_copy_into(token *from, token *to){
+    to->value = from->value;
+    to->isBuiltin = from->isBuiltin;
+    to->isStr = from->isStr;
+    to->isArray = from->isArray;
+    to->isNum = from->isNum;
+    to->length = from->length;
+    to->action = from->action;
+    char *cpy = &from->tok[0];
+    uint8_t i = 0;
+    while (*cpy){
+        to->tok[i] = *cpy;
+        cpy++;
+        i++;
+    }
+    to->tok[i] = '\0';
+}
+
 token *token_search(token *tokens, uint16_t size, char *buff) {
     int i = 0;
     // search builtin tokens

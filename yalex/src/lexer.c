@@ -3,7 +3,7 @@
 #include "lexer.h"
 #include "yalex_core.h"
 
-
+static lexer *last_init_lexer; // HACK
 void lexer_init(error *err, lexer *lex) {
 	for (int i = 0; i < BUILTIN_TOKENS; i++) {
 		token_deinit(&lex->tokens[i]);
@@ -12,6 +12,17 @@ void lexer_init(error *err, lexer *lex) {
 		token_deinit(&lex->variables[j]);
 	}
 	registerCore(err, lex);
+    last_init_lexer = lex;
+}
+
+token *lexer_alloc(error *err/*, lexer *lex*/){
+    lexer *lex = last_init_lexer; //TODO: please fix
+    for (int j = 0; j < lex->size; j++) {
+        if (lex->variables[j].tok[0] == 0) {
+            return &lex->variables[j];
+        }
+    }
+    return 0;
 }
 
 void lexer_parse(error *err, lexer *lex, stack *stk, char *program) {

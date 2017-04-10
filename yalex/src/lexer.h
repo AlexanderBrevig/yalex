@@ -15,6 +15,7 @@ typedef struct _lexer {
 
 token *lexer_search(lexer *lex, char *buff);
 void lexer_init(error *err, lexer *lex);
+token *lexer_alloc(error *err/*, lexer *lex*/);
 void lexer_parse(error *err, lexer *lex, stack *stk, char *input);
 
 #endif

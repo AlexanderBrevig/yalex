@@ -18,12 +18,28 @@ static error equals_tok(token *tok, stack *stack) {
     if (err.code == NO_ERROR) {
         YDBG("DEBUG> ");
         YDBG(arg2->tok);
+        YDBG(arg2->isNum ? " NUM " : " NAN ");
         YDBG(" ");
         YDBG(arg1->tok);
+        YDBG(arg1->isNum ? " NUM " : " NAN ");
         YDBG(" equals -> ");
 
         float isEqual = 0;
         uint8_t foundType = 0;
+
+        error dummy_err;
+        if (token_assert_num(&dummy_err, arg1) == NO_ERROR){
+            foundType = 1;
+            if (token_assert_num(&dummy_err, arg2) == NO_ERROR){
+                float a = arg1->value.number;
+                float b = arg2->value.number;
+                float delta = a - b;
+                isEqual = (delta <  0.001f && delta > -0.001f) ? 1 : 0;
+            }else{
+                err.code = UNEXPECTED_TYPE;
+            }
+        }
+
         if (arg1->isStr){
             foundType = 1;
             if (arg2->isStr){
@@ -38,23 +54,10 @@ static error equals_tok(token *tok, stack *stack) {
                 err.code = UNEXPECTED_TYPE;
             }
         }
-        error dummy_err;
         if (arg1->isBuiltin){
             foundType = 1;
             if (arg2->isBuiltin){
                 isEqual = arg1->tok == arg2->tok ? 1 : 0;
-            }else{
-                err.code = UNEXPECTED_TYPE;
-            }
-        }
-
-        if (token_assert_num(&dummy_err, arg1) == NO_ERROR){
-            foundType = 1;
-            if (token_assert_num(&dummy_err, arg2) == NO_ERROR){
-                float a = arg1->value.number;
-                float b = arg2->value.number;
-                float delta = a - b;
-                isEqual = (delta <  0.001f && delta > -0.001f) ? 1 : 0;
             }else{
                 err.code = UNEXPECTED_TYPE;
             }
