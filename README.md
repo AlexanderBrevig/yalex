@@ -76,15 +76,15 @@ I use this convention for representing status:
 
 `a b =` => _is `a` and `b` equal?_
 
-// `a !` => _not `a`_
+`a ?` => _force `a` to a truthy value where 0 == false, rest is true_
 
-// `a b !` => _`a` is not `b`_
+`a b !` => _`a` is not `b`_
 
-// `a b |` => _`a` or `b`_
+`a b |` => _`a` or `b`_
 
-// `a b &` => _`a` and `b`_
+`a b &` => _`a` and `b`_
 
-// `a b ^` => _`a` xor `b`_
+`a b ^` => _`a` xor `b`_
 
 ### Stack operations
 
@@ -116,7 +116,7 @@ I use this convention for representing status:
 
 `false` => _a falsy value of 0.0f_
 
-// `nop` => _no operation, empty dummy token (for explicit I DON'T WANT ANYTHING HERE)_
+ `nop` => _no operation, empty dummy token (for explicit I DON'T WANT ANYTHING HERE)_
 
 // `a? b? (` => _start a block with optional name `a` and optional arg length `b`_
 
