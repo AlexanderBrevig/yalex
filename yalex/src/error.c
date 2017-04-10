@@ -29,18 +29,26 @@ errorcode error_print(error *err){
         int arg = 0;
         switch (err->code){
             case NOT_A_NUMBER:
-                arg = (int)err->token;
+                arg = (uintptr_t)(void*)err->token;
                 break;
         }
         yalexPrint(buf);
         yalexPrint(" makes ");
         yalexPrint(errors[err->code]);
         yalexPrint(" at index ");
-        itoa(tokenBegin, buf, 10);
+        buf[4] = '\0';
+        buf[3] = '0' + (tokenBegin / 10000) % 10;
+        buf[2] = '0'+ (tokenBegin / 1000) % 10;
+        buf[1] = '0'+ (tokenBegin / 100) % 10;
+        buf[0] = '0'+ tokenBegin % 10;
         yalexPrint(buf);
         if (arg > 0) {
             yalexPrint(" for argument ");
-            itoa(arg, buf, 10);
+            buf[4] = '\0';
+            buf[3] = '0' + (arg / 10000) % 10;
+            buf[2] = '0'+ (arg / 1000) % 10;
+            buf[1] = '0'+ (arg / 100) % 10;
+            buf[0] = '0'+ arg % 10;
             yalexPrint(buf);
         }
         yalexPrintln();

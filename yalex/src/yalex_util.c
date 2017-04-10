@@ -1,17 +1,8 @@
-#ifndef YALEX_YALEX_UTIL_H
-#define YALEX_YALEX_UTIL_H
-
+#include "yalex_util.h"
 #include <math.h>
 
-#define YALEXPRT() yalexPrint("YALEX> ");
-#define YDBG(x) yalexPrint( (x) );
-#define YDBGLN(x) yalexPrint( (x) ); yalexPrintln();
 
-extern void yalexPrint(const char * format);
-
-static inline void yalexPrintln() { yalexPrint("\r\n"); }
-
-static inline void yalftoa(float num, char *fstr){
+void yalftoa(float num, char *fstr){
 	*(fstr++) = (num<0?'-':' ');
 	num = num < 0 ? num - (2*num) : num;
 	int m = log10(num);
@@ -33,5 +24,3 @@ static inline void yalftoa(float num, char *fstr){
 	}
 	*(fstr) = '\0';
 }
-
-#endif

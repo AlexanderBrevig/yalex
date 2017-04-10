@@ -16,10 +16,10 @@ static error and_tok(token *tok, stack *stack) {
     token *b = stack_pop(&err, stack);
     token *a = stack_pop(&err, stack);
     if (token_assert_num(&err, a)!=NO_ERROR){
-        err.token = (uint32_t)1;
+        err.token = (void*)1;
     }
     if (token_assert_num(&err, b)!=NO_ERROR){
-        err.token = (uint32_t)2;
+        err.token = (void*)2;
     }
     if (err.code == NO_ERROR){
         uint8_t and_value = (uint32_t)a->value.number & (uint32_t)b->value.number;
