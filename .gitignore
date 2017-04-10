@@ -46,3 +46,5 @@ yalex.includes
 yalex.sln
 yalex.vc*
 CMakeLists.txt.user
+
+build/
