@@ -6,6 +6,11 @@
 #define YALEX_STACK_SIZE 20
 #include "src/yalex.h"
 
+#include "unity/unity.h"
+#include "tests/tests.h"
+void setUp() {}
+void tearDown() {}
+
 void yalexPrint(const char * format){
     printf(format);
 }
@@ -22,8 +27,16 @@ void yalex_run(char *program){
     lexer_parse(&errlocal, &lex, &stk, program);
 }
 
+
+
 void main() {
     yalex_init(&err, &lex, &stk);
+
+    UNITY_BEGIN();
+    RUN_TEST(test_DUP_should_NotReuseExistingToken);
+    UNITY_END();
+
+    return;
 
     char *programs[] = {
         "false dup 1 + = print",
@@ -85,6 +98,10 @@ void main() {
     for (int i=0; programs[i] != 0; i++){
         yalex_run(programs[i]);
         printf("\r\n_____\r\n");
-        system("pause");
+        #if __linux__
+            char ch = getchar();
+        #elif _WIN32
+            system("pause");
+        #endif
     }
 }
