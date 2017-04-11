@@ -9,16 +9,16 @@ typedef enum _errorcode {
     STACK_POP_FAIL,
     STACK_PEEK_FAIL,
     STACK_OVERFLOW,
-	NOT_A_NUMBER,
-	OUT_OF_MEMORY,
+    NOT_A_NUMBER,
+    OUT_OF_MEMORY,
     NULL_POINTER_EXCEPTION,
     DIVIDE_BY_ZERO,
     UNEXPECTED_TYPE,
-	NO_LEXER,
+    NO_LEXER,
     NUMBER_OF_ERRORS
 } errorcode;
 
-static const char * const errors[NUMBER_OF_ERRORS] = {
+static const char *const errors[NUMBER_OF_ERRORS] = {
     "NO_ERROR",
     "STACK_TOO_SHALLOW",
     "STACK_POP_FAIL",

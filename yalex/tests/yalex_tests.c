@@ -6,7 +6,8 @@ void setUp() {}
 void tearDown() {}
 
 
-void main() {
+void main()
+{
     UNITY_BEGIN();
     //RUN_TEST(test_default_should_StartAtStackIndexZero);
 

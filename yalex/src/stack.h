@@ -5,7 +5,7 @@
 #include "error.h"
 
 #ifndef YALEX_STACK_SIZE
-#define YALEX_STACK_SIZE 256
+    #define YALEX_STACK_SIZE 256
 #endif
 
 typedef struct _token token;

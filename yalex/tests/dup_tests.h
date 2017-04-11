@@ -4,7 +4,8 @@
 #include "../unity/unity.h"
 #include "yalex_test_helpers.h"
 
-void test_DUP_should_NotReuseExistingToken() {
+void test_DUP_should_NotReuseExistingToken()
+{
     PREPARE_DEFAULT_YALEX();
     token original;
     token_init(&err, &original, "orig", 0);

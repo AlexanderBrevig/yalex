@@ -28,12 +28,12 @@
 
 enum {
     /*YALEX*/
-	BEGIN = 0,
+    BEGIN = 0,
     END,
     PRINT,
 
     /*MATH*/
-	PLUS,
+    PLUS,
     MINUS,
     DIVIDE,
     MULTIPLY,
@@ -60,7 +60,7 @@ enum {
     FALSE,
     NOP,
 
-	BUILTIN_END
+    BUILTIN_END
 };
 
 

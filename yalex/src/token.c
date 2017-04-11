@@ -1,27 +1,30 @@
 #include "token.h"
 
-void token_init(error *err, token *tok, const char *name, token_handler tok_handler) {
+void token_init(error *err, token *tok, const char *name, token_handler tok_handler)
+{
     if (tok == 0) { err->code = NULL_POINTER_EXCEPTION; return; }
-	token_deinit(tok);
-	tok->action = tok_handler;
-	for (int i = 0; i < TOKEN_NAME_MAX_LEN && *name; i++) {
-		tok->tok[i] = *name;
-		if (*name) name++;
-	}
+    token_deinit(tok);
+    tok->action = tok_handler;
+    for (int i = 0; i < TOKEN_NAME_MAX_LEN && *name; i++) {
+        tok->tok[i] = *name;
+        if (*name) { name++; }
+    }
 }
 
-void token_deinit(token *tok) {
-	if (tok == 0) { return; }
-	tok->action = 0;
-	for (int i = 0; i < TOKEN_NAME_MAX_LEN; i++) {
-		tok->tok[i] = 0;
-	}
-	tok->value.number = 0;
-	tok->length = 0;
-	tok->isArray = tok->isStr = tok->isNum = tok->isBuiltin = 0;
+void token_deinit(token *tok)
+{
+    if (tok == 0) { return; }
+    tok->action = 0;
+    for (int i = 0; i < TOKEN_NAME_MAX_LEN; i++) {
+        tok->tok[i] = 0;
+    }
+    tok->value.number = 0;
+    tok->length = 0;
+    tok->isArray = tok->isStr = tok->isNum = tok->isBuiltin = 0;
 }
 
-void token_copy_into(token *from, token *to){
+void token_copy_into(token *from, token *to)
+{
     to->value = from->value;
     to->isBuiltin = from->isBuiltin;
     to->isStr = from->isStr;
@@ -31,7 +34,7 @@ void token_copy_into(token *from, token *to){
     to->action = from->action;
     char *cpy = &from->tok[0];
     uint8_t i = 0;
-    while (*cpy){
+    while (*cpy) {
         to->tok[i] = *cpy;
         cpy++;
         i++;
@@ -39,7 +42,8 @@ void token_copy_into(token *from, token *to){
     to->tok[i] = '\0';
 }
 
-token *token_search(token *tokens, uint16_t size, char *buff) {
+token *token_search(token *tokens, uint16_t size, char *buff)
+{
     int i = 0;
     // search builtin tokens
     for (i = 0; i < size; i++) {
@@ -52,7 +56,7 @@ token *token_search(token *tokens, uint16_t size, char *buff) {
                 buf++;
                 didFindMatch++;
             }
-            if (*tok == 0 && *buf != 0){
+            if (*tok == 0 && *buf != 0) {
                 continue;
             }
             uint8_t bothAt0 = *tok == 0 && *buf == 0;
@@ -66,18 +70,21 @@ token *token_search(token *tokens, uint16_t size, char *buff) {
     return 0;
 }
 
-uint8_t token_assert_num(error *err, token *tok) {
-    if (tok == 0 || tok->isNum == 0){
+uint8_t token_assert_num(error *err, token *tok)
+{
+    if (tok == 0 || tok->isNum == 0) {
         err->code = NOT_A_NUMBER;
     }
     return err->code;
 }
 
-void token_clear_type(token *tok){
+void token_clear_type(token *tok)
+{
     tok->isNum = tok->isBuiltin = tok->isStr = tok->isArray = 0;
 }
 
-void token_set_num(token *tok, float num){
+void token_set_num(token *tok, float num)
+{
     tok->isNum = 1;
     tok->value.number = num;
 }

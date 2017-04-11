@@ -6,27 +6,28 @@
 #include "../stack.h"
 #include "../yalex_util.h"
 
-static error divide_tok(token *tok, stack *stack) {
+static error divide_tok(token *tok, stack *stack)
+{
     error err = {
-            .code = NO_ERROR,
-            .token = 0
+        .code = NO_ERROR,
+        .token = 0
     };
     stack_assert_depth(&err, stack, 2);
     token *arg2 = stack_pop(&err, stack);
     token *arg1 = stack_pop(&err, stack);
     if (err.code == NO_ERROR && arg1->isNum != 1) {
         err.code = NOT_A_NUMBER;
-        err.token = (void*)1;
+        err.token = (void *)1;
         return err;
     }
     if (err.code == NO_ERROR && arg2->isNum != 1) {
         err.code = NOT_A_NUMBER;
-        err.token = (void*)2;
+        err.token = (void *)2;
         return err;
     }
-    if (err.code == NO_ERROR && arg2->value.number == 0){
+    if (err.code == NO_ERROR && arg2->value.number == 0) {
         err.code = DIVIDE_BY_ZERO;
-        err.token = (void*)2;
+        err.token = (void *)2;
     }
     if (err.code == NO_ERROR) {
         YDBG("DEBUG> ");

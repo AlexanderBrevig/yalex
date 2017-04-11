@@ -6,7 +6,8 @@
 #include "../stack.h"
 #include "../yalex_util.h"
 
-static error nop_tok(token *tok, stack *stack) {
+static error nop_tok(token *tok, stack *stack)
+{
     error err = {
         .code = NO_ERROR,
         .token = 0

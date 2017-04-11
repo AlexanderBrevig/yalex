@@ -6,30 +6,30 @@
 #include "../stack.h"
 #include "../yalex_util.h"
 
-static error print_tok(token *tok, stack *stack) {
+static error print_tok(token *tok, stack *stack)
+{
     error err = {
-            .code = NO_ERROR,
-            .token = 0
+        .code = NO_ERROR,
+        .token = 0
     };
     stack_assert_depth(&err, stack, 1);
     token *arg = stack_pop(&err, stack);
 
-	if (arg != 0) {
+    if (arg != 0) {
         YDBG("print tok ");
         YDBG(arg->tok);
         YDBGLN("");
 
         YALEXPRT();
-		if (arg->isNum && arg != &token_true && arg != &token_false) {
-			char buf[80];
-			yalftoa(arg->value.number, buf);
-			yalexPrint(buf);
-		}
-		else {
-			yalexPrint((char*)arg->tok);
-		}
+        if (arg->isNum && arg != &token_true && arg != &token_false) {
+            char buf[80];
+            yalftoa(arg->value.number, buf);
+            yalexPrint(buf);
+        } else {
+            yalexPrint((char *)arg->tok);
+        }
         yalexPrintln("");
-	}
+    }
 
     return err;
 }

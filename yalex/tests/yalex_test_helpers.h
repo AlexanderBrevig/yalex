@@ -7,7 +7,7 @@
 #define CALL_TOK_ACTON(tok, stk) \
 token_handler handl = (token_handler)tok.action; \
 error error = (*handl)(0, &stk)
-	                    
+
 
 #define PREPARE_YALEX(MEM) \
 	token memoryblock[MEM]; \
