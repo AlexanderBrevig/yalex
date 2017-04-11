@@ -3,15 +3,24 @@
 
 #include <math.h>
 
+#ifdef YALEX_DEBUG
 #define YALEXPRT() yalexPrint("YALEX> ");
 #define YDBG(x) yalexPrint( (x) );
-#define YDBGLN(x) yalexPrint( (x) ); yalexPrintln();
+#define YDBGLN(x) yalexPrintln( (x) );
+#else
+#define YALEXPRT() yalexPrint("YALEX> ");
+#define YDBG(x) 
+#define YDBGLN(x)
+#endif
 
 static void yalexPrint(const char * format){
     printf(format);
 }
 
-static inline void yalexPrintln() { yalexPrint("\r\n"); }
+static inline void yalexPrintln(const char *msg) {
+    yalexPrint(msg);
+    yalexPrint("\r\n");
+}
 
 static void yalftoa(float num, char *fstr){
 	*(fstr++) = (num<0?'-':' ');

@@ -1,4 +1,5 @@
 #include "yalex_core.h"
+#include "yalex_util.h"
 
 void registerConsts(error *err, lexer *lex){
     token_init(err, &token_true, "true", 0);
@@ -23,7 +24,7 @@ void registerMath(error *err, lexer *lex){
     token_init(err, &lex->tokens[GREATER_THAN], ">", &greaterthan_tok);
     token_init(err, &lex->tokens[EQUALS], "=", &equals_tok);
     token_init(err, &lex->tokens[NOT_EQUALS], "!", &not_equals_tok);
-    token_init(err, &lex->tokens[BOOLEAN], "?", &boolean_tok);
+    token_init(err, &lex->tokens[BOOLEAN_TOK], "?", &boolean_tok);
     token_init(err, &lex->tokens[OR], "|", &or_tok);
     token_init(err, &lex->tokens[AND], "&", &and_tok);
     token_init(err, &lex->tokens[XOR], "^", &xor_tok);
@@ -44,6 +45,7 @@ void registerYalex(error *err, lexer *lex){
 }
 
 void registerCore(error *err, lexer *lex){
+    YDBGLN("registerCore");
     registerConsts(err, lex);
     registerMath(err, lex);
     registerStackops(err, lex);

@@ -41,7 +41,7 @@ enum {
     GREATER_THAN,
     EQUALS,
     NOT_EQUALS,
-    BOOLEAN,
+    BOOLEAN_TOK,
     AND,
     OR,
     XOR,

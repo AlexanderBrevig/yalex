@@ -5,6 +5,7 @@
 
 #define YALEX_STACK_SIZE 20
 #include "yalex.h"
+#include "yalex_core.h" //get PRINT token
 
 token memoryblock[100]; //memory size
 token tokens[BUILTIN_TOKENS];
@@ -19,14 +20,29 @@ void yalex_run(char *program){
 }
 
 void main() {
-    char *programs[1];
-    for (int i=0; programs[i] != 0; i++){
-        //TODO: add a REPL
-
+    yalex_init(&err, &lex, &stk);
+    char buffer[128];
+    size_t bufsize = 128;
+    while (1) {
+        YALEXPRT();
         #if __linux__
-            char ch = getchar();
+            char *ptr = &buffer[0];
+            getline(&ptr,&bufsize,stdin);
+            lexer_parse(&err, &lex, &stk, buffer);
+            /*yalex_run(buffer);/*
+            token *tok = stack_peek(&err, &stk);
+                    
+            if (tok != 0) {
+                token_handler handl = (token_handler)lex.tokens[PRINT].action;
+                error error = (*handl)(0, &stk);
+                YDBGLN("REPLPUSH");
+                stack_push(&err, &stk, tok);
+            }*/
         #elif _WIN32
+            printf("ADD REPL FOR WINDOWS");
             system("pause");
+        #else
+            #error NO REPL FOR PLATFORM
         #endif
     }
 }

@@ -10,7 +10,7 @@ void yalex_init(error *err, lexer *lex, stack *stk) {
     error_init(err);
     stack_init(err, stk);
     lexer_init(err, lex);
-    yalexPrint("YALEX> initialized"); yalexPrintln();
+    YDBGLN("YALEX> initialized");
 }
 
 #endif

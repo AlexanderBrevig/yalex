@@ -41,7 +41,7 @@ static error plus_tok(token *tok, stack *stack) {
 		arg1->isNum = 1;
 		arg1->value.number = res;
 		stack_push(&err, stack, arg1);
-
+		YDBGLN("AFTERPLUS");
 	}
     return err;
 }

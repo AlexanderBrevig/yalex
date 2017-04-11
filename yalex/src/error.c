@@ -9,6 +9,7 @@ void error_init(error *err) {
 
 errorcode error_print(error *err){
     if (err->code != NO_ERROR) {
+        YDBGLN("ERROR");
         char buf[128];
         int begin = 0;
         int tokenEnd = 0;
@@ -51,7 +52,7 @@ errorcode error_print(error *err){
             buf[0] = '0'+ arg % 10;
             yalexPrint(buf);
         }
-        yalexPrintln();
+        yalexPrintln("");
         YALEXPRT();
 
         int16_t idx = 0;
@@ -67,7 +68,7 @@ errorcode error_print(error *err){
             }
             idx++;
         }
-        yalexPrintln();
+        yalexPrintln("");
     }
     return err->code;
 }

@@ -59,6 +59,8 @@ token *stack_peek(error *err, stack *stk) {
         err->code = STACK_PEEK_FAIL;
         return 0;
     }
+    YDBG("STACK_PEEK found ");
+    YDBGLN(stk->stack[idx]->tok);
     return stk->stack[idx];
 }
 
