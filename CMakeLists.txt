@@ -1,14 +1,26 @@
 cmake_minimum_required(VERSION 3.7)
 project(yalex C)
 
-enable_language(C)
+# Let's tell it a bit about our environment
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-set(SOURCE_FILES
-        yalex/src/yalex.h
-        yalex/unity/unity.c
-        yalex/unity/unity.h
-        yalex/unity/unity_internals.h
-        yalex/demo.c yalex/src/yalex_util.h yalex/src/token.h yalex/src/stack.h yalex/src/error.h yalex/src/stack.c yalex/src/token.c yalex/src/lexer.h yalex/src/lexer.c yalex/src/error.c yalex/src/yalex_core.h yalex/src/core/yalex_core_print.h yalex/src/core/yalex_core_dup.h yalex/src/core/yalex_core_pop.h yalex/src/core/yalex_core_minus.h yalex/src/core/yalex_core_divide.h yalex/src/core/yalex_core_equals.h yalex/src/core/yalex_core_greaterthan.h yalex/src/core/yalex_core_multiply.h yalex/src/core/yalex_core_lessthan.h yalex/src/core/yalex_core_rot.h yalex/src/core/yalex_core_clr.h yalex/src/core/yalex_core_boolean.h yalex/src/core/yalex_core_or.h yalex/src/core/yalex_core_and.h yalex/src/core/yalex_core_not_equals.h yalex/src/core/yalex_core_xor.h yalex/src/core/yalex_core_nop.h)
+# We declare a variable to select what to build set
+SET(TARGET_GROUP production CACHE STRING "What Should I Build?")
 
-add_executable(yalex ${SOURCE_FILES})
-target_link_libraries(yalex m)
+# common
+  add_subdirectory(yalex/src)
+
+if(TARGET_GROUP STREQUAL release)
+# add system specific code here
+  # no really, right here
+
+elseif(TARGET_GROUP STREQUAL test)
+  include(CTest)
+
+# add deps
+  add_subdirectory(yalex/unity) 
+  add_subdirectory(yalex/tests) 
+else() 
+  message(FATAL_ERROR "I don't know the TARGET_GROUP you gave me!")
+endif()
+
