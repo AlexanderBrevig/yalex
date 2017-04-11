@@ -14,6 +14,17 @@ Yalex uses the reverse polish notation as it's main source of inspiration.
 You always build up a stack of things and can use operators to modify said stack - and of course produce effects. In yalex, these operators are functions and one function can be the operand of another.
 
 
+## Get the source and build it
+
+    git clone https://github.com/AlexanderBrevig/yalex
+    cd yalex
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ./bin/yalex_test_app #-> run tests
+    ./bin/release        #-> run REPL
+
 So, let's get right to it! Here's the hello world:
 
 ## The hello world program
