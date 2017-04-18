@@ -71,6 +71,14 @@ I use this convention for representing status:
  * // `not imlemented yet`
  * `implemented`
 
+### Core
+
+`'this is a string'` ok?
+
+`12 12.3 -3` are all numbers
+
+`a` is a variable, or just `'a'` if used before it is `set`
+
 ### Math
 
 `a b +` => _ plus operator of `a` + `b`_

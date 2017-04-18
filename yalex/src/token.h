@@ -5,7 +5,7 @@
 #include "error.h"
 #include "stack.h"
 
-#define TOKEN_NAME_MAX_LEN 32
+#define TOKEN_NAME_MAX_LEN 12
 
 typedef union _token_value {
     float number;
