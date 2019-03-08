@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #ifndef YALEX_SIZE_STACK
-#define YALEX_SIZE_STACK 200
+#define YALEX_SIZE_STACK 20000
 #endif
 #ifndef YALEX_SIZE_TOKEN_STR
 #define YALEX_SIZE_TOKEN_STR 16

@@ -143,24 +143,37 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
         #undef MICROLANG_BUF_SIZE__TEMP
         #undef MICROLANG_PRE_AND_POST_SIZE__TEMP
     }
+    yalex_print_str(world, "REGISTERS:");
+    char bufTotal[34 * YALEX_SIZE_REGISTERS];
+    bufTotal[0] = 0;
+    for (unsigned char i = 0; i < YALEX_SIZE_REGISTERS; i++) {
+        char buf[32]; //TODO: which length for long long or x?
+        YALEXNTOA(world->registers[i], buf, 32, 10);
+        strcat_s(bufTotal, 34 * YALEX_SIZE_REGISTERS, buf);
+        strcat_s(bufTotal, 34 * YALEX_SIZE_REGISTERS, ", ");
+    }
+    yalex_print_str(world, bufTotal);
     yalex_print_str(world, "/DUMP");
 }
 
 void token_regset_exec(yalex_world *world, stack_item **out) {
-    char *name = world->stack[world->sp + 2].data.text;
-    unsigned char idx = name[1] - '0';
-    world->registers[idx] = out[0]->data.number;
+    numeric_type idx = out[0]->data.number;
+    if (idx < YALEX_SIZE_REGISTERS && idx >= 0) {
+        world->registers[idx] = SP.data.number;
+    } else {
+        int x = 0;
+    }
 }
 
 void token_regget_exec(yalex_world *world, stack_item **out) {
     char *name = world->stack[world->sp + 1].data.text;
     unsigned char idx = name[1] - '0';
-    if (idx >= YALEX_SIZE_REGISTERS) {
-        int  x = 0;
-    } else {
+    if (idx < YALEX_SIZE_REGISTERS && idx >= 0) {
         yalex_stack_push_sp(world);
         SP.meta = YALEX_TOKEN_NUM;
         SP.data.number = world->registers[idx];
         //microlang_push_sp(world);
+    } else {
+        int x = 0;
     }
 }

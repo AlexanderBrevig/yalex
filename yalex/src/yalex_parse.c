@@ -110,6 +110,14 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
     //it transparently moves the SP down and retains the data that used to be there
     else if (strcmp(token, "pop") == 0) {
         token_pop_exec(world, 0);
+    } 
+    else if (token[0] == 'R' && isdigit(token[1]) && token[2] == 'S') {
+        stack_item dummy;
+        dummy.data.number = token[1] - '0';
+
+        stack_item *dummyptr = &dummy;
+        stack_item **fakeout = &dummyptr;
+        token_regset_exec(world, fakeout);
     } else {
         yalex_stack_push_sp(world);
         if ((tokenIsNumber && token[0] != '-')

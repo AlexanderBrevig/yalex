@@ -43,6 +43,6 @@ void yalex_system_init(yalex_world *world) {
     //microlang_token_register(world, "push", 0, 0, token_push_exec);
     yalex_system_token_register(world, "dup", 0, 1, token_dup_exec);
     yalex_system_token_register(world, "dump", 0, 0, token_dump_exec);
-    yalex_system_token_register(world, "R*S", basic_op_req, 1, token_regset_exec);
+    //yalex_system_token_register(world, "R*S", basic_op_req, 1, token_regset_exec);
     yalex_system_token_register(world, "R*R", 0, 0, token_regget_exec);
 }

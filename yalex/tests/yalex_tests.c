@@ -324,8 +324,16 @@ void test_pack_lambda_deferred_exec(void) {
 
 void test_register_set(void) {
     yalex_repl(&world, "1 R0S");
+    TEST_ASSERT_EQUAL_MESSAGE(1, world.sp, "register set are non destructive");
     TEST_ASSERT_EQUAL(1, world.registers[0]);
-    TEST_ASSERT_EQUAL_INT8(0, messageCallbacks);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
+void test_register_set_lambda_alias(void) {
+    yalex_repl(&world, ":r0s (R0S)");
+    yalex_repl(&world, "1 r0s");
+    TEST_ASSERT_EQUAL_MESSAGE(1, world.sp, "register set are non destructive");
+    TEST_ASSERT_EQUAL(1, world.registers[0]);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 
 void test_register_get(void) {
@@ -334,9 +342,21 @@ void test_register_get(void) {
     TEST_ASSERT_SP_META_IS(NUM);
     TEST_ASSERT_EQUAL(1, world.registers[0]);
     TEST_ASSERT_EQUAL(2, world.registers[1]);
-    TEST_ASSERT_EQUAL(1, world.sp);
+    TEST_ASSERT_EQUAL_MESSAGE(3, world.sp, "register set are non destructive, stack is 1 2 3");
     TEST_ASSERT_EQUAL_STRING("3", buffer);
-    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+    TEST_ASSERT_EQUAL_INT8(2, messageCallbacks);
+}
+void test_register_get_lambda_alias(void) {
+    yalex_repl(&world, ":r0r (R0R)");
+    yalex_repl(&world, ":r1r (R1R)");
+    yalex_repl(&world, "1 R0S 2 R1S");
+    yalex_repl(&world, "r0r r1r +");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL(1, world.registers[0]);
+    TEST_ASSERT_EQUAL(2, world.registers[1]);
+    TEST_ASSERT_EQUAL_MESSAGE(3, world.sp, "register set are non destructive, stack is 1 2 3");
+    TEST_ASSERT_EQUAL_STRING("3", buffer);
+    TEST_ASSERT_EQUAL_INT8(2, messageCallbacks);
 }
 
 void test_fault_double_space(void) {
@@ -362,7 +382,6 @@ void test_fault_remove_interpreted(void) {
 
 int main() {
     UNITY_BEGIN();
-    
     
     RUN_TEST(test_repl_echo_negative);
 
@@ -411,7 +430,9 @@ int main() {
     RUN_TEST(test_pack_lambda_deferred_exec);
 
     RUN_TEST(test_register_set);
+    RUN_TEST(test_register_set_lambda_alias);
     RUN_TEST(test_register_get);
+    RUN_TEST(test_register_get_lambda_alias);
 
     RUN_TEST(test_fault_whitespace);
     RUN_TEST(test_fault_double_space);

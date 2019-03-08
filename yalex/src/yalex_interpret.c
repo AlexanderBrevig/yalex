@@ -91,12 +91,14 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
     }
     return 0;
 }
-
+//#include "yalex_tokens.h"
 void yalex_interpret_sp(yalex_world *world) {
+    //token_dump_exec(world, 0);
     char error = 0;
     error += yalex_interpret_system_sp(world);
     error += yalex_interpret_lambda_sp(world);
     if (error == 0) {
         yalex_print_err(world, "Interpret Error");
     }
+    //getchar();
 }

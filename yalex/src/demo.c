@@ -25,13 +25,14 @@ int yalex(void) {
     yalex_repl(&world, ":iset (R4S)");
     yalex_repl(&world, ":i (R4R)");
     yalex_repl(&world, ":fibstep (t1 t2 + resset t2 t1set res t2set i 1 + iset rec)");
-    yalex_repl(&world, ":rec (n i 1 + < 'fibstep res select)");
+    yalex_repl(&world, ":rec (i n 1 + < 'fibstep res select)");
     yalex_repl(&world, ":fib (nset 0 t1set 1 t2set 0 resset 1 iset rec)");
 
     while (1) {
         word[0] = 0;
         fgets(word, sizeof(word), stdin);
         yalex_repl(&world, word);
+        int x = 0;
     }
     return 0;
 }
