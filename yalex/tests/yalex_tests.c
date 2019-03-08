@@ -12,9 +12,7 @@ yalex_world world;
 char buffer[BUFFER_SIZE];
 char messageCallbacks = 0;
 void onMessageCallback(const char* ptr) {
-    for (int i = 0; i < BUFFER_SIZE; i++) { //TODO: memset?
-        buffer[i] = 0;
-    }
+    memset(buffer, 0, BUFFER_SIZE);
     //printf("\nMSG: '%s'\n",ptr);
     messageCallbacks++;
     char *p = (char *) ptr;
@@ -347,16 +345,6 @@ void test_fault_remove_interpreted(void) {
     TEST_ASSERT_EQUAL(3, world.stack[1].data.number);
     TEST_ASSERT_NOT_EQUAL('+', world.stack[3].data.text[0]);
 }
-
-
-//TODO: add hex parse by 0x prefix
-//TODO: add string parse by '' clause
-//TODO: clr command
-//TODO: have registers not affect stack (ability to register popped values)
-//TODO: consider nop
-//TODO: consider adding true false
-//TODO: redefine lambda by same name
-
 
 int main() {
     UNITY_BEGIN();

@@ -37,7 +37,8 @@ char yalex_interpret_system_sp(yalex_world *world) {
     if (SP.meta == YALEX_TOKEN_EVAL) {
         stack_item *popped = yalex_stack_pop_sp(world);
 
-        stack_item* out[YALEX_SIZE_MAX_DEPENDABLE_STACK]; //TODO: figure out system max pop req
+        stack_item* out[YALEX_SIZE_MAX_DEPENDABLE_STACK];
+
         for (int i = 0; i < YALEX_SIZE_MAX_DEPENDABLE_STACK; i++) {
             out[i] = 0;
         }
@@ -50,15 +51,14 @@ char yalex_interpret_system_sp(yalex_world *world) {
                     yalex_stack_item_clear(out[r]);
                 }
             } else if (resolve != 0) {
-                //TODO: handle error
-                printf("\nError `%s` resolve: ", yalex_system()->tokens[i].token);
+                yalex_print_err(world, "Interpret Error:");
+                yalex_print_err(world, yalex_system()->tokens[i].token);
                 switch (resolve) {
-                    case YALEX_EVAL_ERR_STACK_SHALLOW: printf(" stack too shallow"); break;
-                    case YALEX_EVAL_ERR_STACK_WRONG_TYPES: printf(" stack has wrong types"); break;
-                    default:
+                    case YALEX_EVAL_ERR_STACK_SHALLOW: yalex_print_err(world, "Stack too shallow"); break;
+                    case YALEX_EVAL_ERR_STACK_WRONG_TYPES: yalex_print_err(world, "Stack has wrong types"); break;
+                    default: 
                         break;
                 }
-                printf("\n");
             }
         }
         if (popped->meta == YALEX_TOKEN_EVAL) {
@@ -74,7 +74,6 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
         char found = 0;
         for (int i = 0; i < YALEX_SIZE_LAMBDAS_STACK; i++) {
             if (world->lambdas[i].name[0] && strcmp(world->lambdas[i].name, SP.data.text) == 0) {
-                //TODO: resolve requirements
                 yalex_stack_pop_sp(world);
                 if (world->lambdas[i].name[0] == '$') {
                     world->lm--; //anonymous lambdas are one use only
@@ -98,6 +97,6 @@ void yalex_interpret_sp(yalex_world *world) {
     error += yalex_interpret_system_sp(world);
     error += yalex_interpret_lambda_sp(world);
     if (error == 0) {
-        //TODO: handle error
+        yalex_print_err(world, "Interpret Error");
     }
 }

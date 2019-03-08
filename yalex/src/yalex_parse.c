@@ -11,7 +11,7 @@ void yalex_parse_state_init(parse_state *state) {
     state->tokenIsNumber = 1;
     state->tokenIdx = 0;
     state->lambdaStackIdx = 0;
-    for (int i = 0; i < YALEX_SIZE_TOKEN_STR; i++) { state->token[i] = 0; }
+    memset(state->token, 0, YALEX_SIZE_TOKEN_STR);
     state->lmnew = 0;
 }
 
@@ -44,7 +44,8 @@ char * yalex_parse_lambda_def_undef(yalex_world *world, parse_state *state, lamb
                 world->lm--; //remove
             }
         }
-        for (int i = 0; i < YALEX_SIZE_TOKEN_STR; i++) { state->token[i] = 0; }
+
+        memset(state->token, 0, YALEX_SIZE_TOKEN_STR);
     }
     return code;
 }
@@ -159,17 +160,20 @@ void yalex_parse(yalex_world *world, const char* repltext) {
             } else if (*code == ':' && parseState.lmnew == 0) {
                 code = yalex_parse_lambda_def_undef(world, &parseState, &lm, code);
             } else {
-                if (parseState.tokenIdx + 1 == YALEX_SIZE_TOKEN_STR) break; //TODO: fix
-                char * codeAt = yalex_parse_lambda_stack(world, &parseState, &lm, code);
-                if (codeAt) {
-                    code = codeAt;
+                if (parseState.tokenIdx + 1 == YALEX_SIZE_TOKEN_STR) {
+                    yalex_print_err(world, "Error: token too long");
                 } else {
-                    // parse regular token if not currently parsing lambda stack
-                    if (parseState.tokenIsNumber) {
-                        parseState.tokenIsNumber = (isdigit(*code) || (parseState.tokenIdx == 0 && *code == '-'));
+                    char * codeAt = yalex_parse_lambda_stack(world, &parseState, &lm, code);
+                    if (codeAt) {
+                        code = codeAt;
+                    } else {
+                        // parse regular token if not currently parsing lambda stack
+                        if (parseState.tokenIsNumber) {
+                            parseState.tokenIsNumber = (isdigit(*code) || (parseState.tokenIdx == 0 && *code == '-'));
+                        }
+                        parseState.token[parseState.tokenIdx++] = *code;
+                        parseState.token[parseState.tokenIdx] = 0;
                     }
-                    parseState.token[parseState.tokenIdx++] = *code;
-                    parseState.token[parseState.tokenIdx] = 0;
                 }
             }
         }
@@ -179,9 +183,9 @@ void yalex_parse(yalex_world *world, const char* repltext) {
 }
 
 void yalex_lambda_init(lambda *lm) {
-    for (int i = 0; i < YALEX_SIZE_TOKEN_STR; i++) lm->name[i] = 0;
-    for (int i = 0; i < YALEX_SIZE_MAX_DEPENDABLE_STACK; i++) lm->requirements[i] = 0;
-    for (int i = 0; i < YALEX_SIZE_LAMBDA_STACK_STR; i++) lm->stack[i] = 0;
+    memset(lm->name, 0, YALEX_SIZE_TOKEN_STR);
+    memset(lm->requirements, 0, YALEX_SIZE_MAX_DEPENDABLE_STACK);
+    memset(lm->stack, 0, YALEX_SIZE_LAMBDA_STACK_STR);
     lm->requirementCount = 0;
 }
 
