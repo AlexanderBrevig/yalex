@@ -49,6 +49,9 @@ void yalex_system_init(yalex_world *world) {
     //microlang_token_register(world, "push", 0, 0, token_push_exec);
     yalex_system_token_register(world, "dup", 0, 1, token_dup_exec);
 
+    yalex_system_token_register(world, "clr", 0, 0, token_clr_exec);
+    
+
     char basic_resolve_req[1] = { YALEX_TOKEN_LAMBDA_DEFERRED };
     yalex_system_token_register(world, "resolve", basic_resolve_req, 1, token_resolve_exec);
     

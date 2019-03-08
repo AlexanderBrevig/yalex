@@ -256,6 +256,20 @@ void test_basic_op_dump(void) {
     TEST_ASSERT_EQUAL_INT8(10, messageCallbacks);
 }
 
+void test_basic_op_clr(void) {
+    yalex_repl(&world, "1 R1S pop");
+    yalex_repl(&world, ":lm (1)");
+    yalex_repl(&world, "1 2 3");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL(1, world.registers[1]);
+    TEST_ASSERT_EQUAL(1, world.lm);
+    TEST_ASSERT_EQUAL(3, world.sp);
+    yalex_repl(&world, "clr");
+    TEST_ASSERT_EQUAL(0, world.registers[1]);
+    TEST_ASSERT_EQUAL(0, world.lm);
+    TEST_ASSERT_EQUAL(0, world.sp);
+}
+
 /// Stack pack
 void test_pack_empty_is_assigned_and_removed_if_called(void) {
     yalex_repl(&world, "()");
@@ -449,6 +463,8 @@ int main() {
     RUN_TEST(test_basic_op_print);
     RUN_TEST(test_basic_op_dump);
 
+    RUN_TEST(test_basic_op_clr);
+
     RUN_TEST(test_pack_empty_is_assigned_and_removed_if_called);
     RUN_TEST(test_pack_anonymous_is_resolved);
     RUN_TEST(test_pack_two_anonymous_is_resolved);
@@ -465,7 +481,7 @@ int main() {
     RUN_TEST(test_register_set_lambda_alias);
     RUN_TEST(test_register_get);
     RUN_TEST(test_register_get_lambda_alias);
-
+    
     RUN_TEST(test_fault_whitespace);
     RUN_TEST(test_fault_double_space);
     RUN_TEST(test_fault_remove_interpreted);

@@ -183,3 +183,7 @@ void token_regget_exec(yalex_world *world, stack_item **out) {
         int x = 0;
     }
 }
+
+void token_clr_exec(yalex_world *world, stack_item **out) {
+    yalex_init(world, world->onResultCallback);
+}
