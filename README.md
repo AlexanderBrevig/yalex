@@ -10,6 +10,10 @@ Yalex uses the reverse polish notation and FORTH as it's main source of inspirat
 
 You always build up a stack of things and can use operators to modify said stack - and of course produce effects. In yalex, these operators are functions and one function can be the operand of another.
 
+## Get the code and start to play
+
+	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex/
+
 ## Tested functionality
 
 	+ - * /
