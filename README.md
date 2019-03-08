@@ -3,7 +3,7 @@
 > yalex is a minimalist functional scripting language for embedded systems
 
 Yet Another LEXer. Also, I'm Alex.
-It's worth noting that y is kind of similar to lambda which is popular for indicating functional programming language.
+It's worth noting that y is kind of similar to lambda which is popular for indicating a functional programming language.
 What else? To lex is the process of taking text and convert it to tokens. Guess what, yalex does this too!
 
 Yalex uses the reverse polish notation and FORTH as it's main source of inspiration. (I learned about FORTH after I started this project)
@@ -12,17 +12,17 @@ You always build up a stack of things and can use operators to modify said stack
 
 ## Code example; (almost) fibonacci
 
-    :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec
-    :rec (R4R R0R 1 + < 'fibstep _ select
-    :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec pop pop pop pop pop pop R3R
+    :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)
+    :rec (R4R R0R 1 + < 'fibstep _ select)
+    :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec pop pop pop pop pop pop R3R)
 
 Here it is, side by side a similar C implementation:
 
     #include <stdio.h>
     /*  
-        :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec
-        :rec (R4R R0R 1 + < 'fibstep _ select
-        :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec pop pop pop pop pop pop R3R
+        :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)
+        :rec (R4R R0R 1 + < 'fibstep _ select)
+        :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec pop pop pop pop pop pop R3R)
         10 fib
         89
     */
