@@ -61,6 +61,9 @@ void yalex_system_init(yalex_world *world) {
     for (size_t i = 0; i < YALEX_SIZE_SYS_LAMBDAS_STACK; i++) {
         yalex_lambda_init(yalex_system()->lambdas[i]);
     }
-    yalex_system_lambda_init(&yalex_system()->lambdas[0], "nop", "()");
-    yalex_system_lambda_init(&yalex_system()->lambdas[1], "_", "('nop)");
+    int idx = 0;
+    yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "nop", "()");
+    yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "_", "('nop)");
+    yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "true", "(1)");
+    yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "false", "(0)");
 }
