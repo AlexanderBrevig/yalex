@@ -59,6 +59,9 @@ char yalex_interpret_system_sp(yalex_world *world) {
                     default: 
                         break;
                 }
+                for (int r = 0; r < yalex_system()->tokens[i].requirementCount; r++) {
+                    yalex_stack_pop_sp(world);
+                }
             }
         }
         if (popped->meta == YALEX_TOKEN_EVAL) {
@@ -79,6 +82,14 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
                     world->lm--; //anonymous lambdas are one use only
                 }
                 yalex_parse(world, world->lambdas[i].stack);
+                found = 1;
+                break;
+            }
+        }
+        for (int i = 0; i < YALEX_SIZE_SYS_LAMBDAS_STACK; i++) {
+            if (yalex_system()->lambdas[i].name[0] && strcmp(yalex_system()->lambdas[i].name, SP.data.text) == 0) {
+                yalex_stack_pop_sp(world);
+                yalex_parse(world, yalex_system()->lambdas[i].stack);
                 found = 1;
                 break;
             }

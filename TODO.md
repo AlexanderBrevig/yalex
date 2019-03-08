@@ -17,14 +17,15 @@ I pledge to try and keep this TODO up to date with actual code.
 - [x] lambdas pack      `(1 2)` will be evaluated and leave `1 2` on stack
 - [x] lambdas named     `:add1 (1 +)` can be invoked by `add1` and will then leave `1 +` on stack which will interpret
 - [x] lambdas named     `add1:` will undefine `add1` if it exists
+- [x] handle no work    `nop` and `_` can be used as discard values, `nop` will immediately go, `_` must be resolved by `select` or `resolve`        
 
 ## PLANNED
 
 - [ ] hex parse by `0x` prefix
 - [ ] string parse by `' '` clause
-- [ ] `clr` command
+- [ ] `clr` command clears _everything_
 - [ ] have registers not affect stack (ability to register popped values)
-- [ ] `nop`
+- [ ] `"1 2 3" parse` adds 1 2 3 to stack
 - [ ] `true` `false`
 - [ ] redefine lambda by same name
 - [ ] add lambda requirements `<NUM NUM NAN>` syntax?

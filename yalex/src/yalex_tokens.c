@@ -121,6 +121,12 @@ void token_dup_exec(yalex_world *world, stack_item **out) {
     token_dup_helper(world, out[0]);
 }
 
+void token_resolve_exec(yalex_world *world, stack_item **out) {
+    yalex_stack_push_sp(world);
+    SP.meta = YALEX_TOKEN_LAMBDA;
+    strcpy_s(SP.data.text, YALEX_SIZE_TOKEN_STR, &SP.data.text[1]);
+}
+
 void token_dump_exec(yalex_world *world, stack_item **out) {
     yalex_print_str(world, "DUMP\nSTACK:");
     for (unsigned char i = 1; i <= world->sp; i++) {

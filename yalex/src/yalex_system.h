@@ -15,6 +15,7 @@ typedef struct _token_built_in {
 typedef struct _yalex_sys {
     token_built_in tokens[YALEX_SIZE_TOKENS];
     unsigned char tokenCount;
+    lambda lambdas[YALEX_SIZE_SYS_LAMBDAS_STACK];
 } yalex_sys;
 
 yalex_sys *yalex_system();

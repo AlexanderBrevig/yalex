@@ -20,6 +20,7 @@ void token_dup_helper(yalex_world *world, stack_item *out);
 void token_pop_exec(yalex_world *world, stack_item **out);
 void token_push_exec(yalex_world *world, stack_item **out);
 void token_dup_exec(yalex_world *world, stack_item **out);
+void token_resolve_exec(yalex_world *world, stack_item **out);
 void token_dump_exec(yalex_world *world, stack_item **out);
 void token_regset_exec(yalex_world *world, stack_item **out);
 void token_regget_exec(yalex_world *world, stack_item **out);

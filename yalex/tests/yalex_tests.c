@@ -5,7 +5,7 @@
 #include "..\Unity\src\unity.h"
 #include "..\src\yalex.h"
 
-#define TEST_ASSERT_SP_META_IS(META) TEST_ASSERT_EQUAL_INT8_MESSAGE(world.stack[world.sp].meta, YALEX_TOKEN_##META, "Expected number on stack")
+#define TEST_ASSERT_SP_META_IS(META) TEST_ASSERT_EQUAL_INT8_MESSAGE(world.stack[world.sp].meta, YALEX_TOKEN_##META, "Expected " #META " on stack")
 
 yalex_world world;
 #define BUFFER_SIZE 128
@@ -56,7 +56,7 @@ void test_repl_echo_string(void) {
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 
-void test_basic_last_token_of_two(void) {
+void test_repl_echo_last_token_of_two(void) {
     yalex_repl(&world, "1 2");
     TEST_ASSERT_SP_META_IS(NUM);
     TEST_ASSERT_EQUAL_STRING("2", buffer);
@@ -215,12 +215,14 @@ void test_basic_op_push(void) {
 
 void test_basic_op_select_true(void) {
     yalex_repl(&world, "10 5 > 1 0 select");
+    TEST_ASSERT_EQUAL_INT8(1, world.sp);
     TEST_ASSERT_SP_META_IS(NUM);
     TEST_ASSERT_EQUAL_STRING("1", buffer);
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 void test_basic_op_select_false(void) {
     yalex_repl(&world, "5 10 > 1 0 select");
+    TEST_ASSERT_EQUAL_INT8(1, world.sp);
     TEST_ASSERT_SP_META_IS(NUM);
     TEST_ASSERT_EQUAL_STRING("0", buffer);
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
@@ -233,12 +235,25 @@ void test_basic_op_dup(void) {
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 
+void test_basic_op_nop(void) {
+    yalex_repl(&world, "nop");
+    TEST_ASSERT_EQUAL_INT8(0, world.sp);
+    TEST_ASSERT_EQUAL_INT8(0, messageCallbacks);
+}
+
+void test_basic_op_(void) {
+    yalex_repl(&world, "1 2 < 1 _ select");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_INT8(1, world.sp);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
+
 void test_basic_op_dump(void) {
     yalex_repl(&world, ":tok (42)");
     yalex_repl(&world, "1 2 3 dump");
     TEST_ASSERT_EQUAL_INT8(3, world.sp);
     TEST_ASSERT_EQUAL_INT8(1, world.lm);
-    TEST_ASSERT_EQUAL_INT8(8, messageCallbacks);
+    TEST_ASSERT_EQUAL_INT8(10, messageCallbacks);
 }
 
 /// Stack pack
@@ -321,6 +336,14 @@ void test_pack_lambda_deferred_exec(void) {
     TEST_ASSERT_EQUAL_STRING("42", buffer);
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
+void test_pack_lambda_deferred_resolve(void) {
+    yalex_repl(&world, ":tok (42)");
+    yalex_repl(&world, "'tok resolve");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_MESSAGE(1, world.sp, "resolve and tok will, well, resolve");
+    TEST_ASSERT_EQUAL_STRING("42", buffer);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
 
 void test_register_set(void) {
     yalex_repl(&world, "1 R0S");
@@ -359,6 +382,7 @@ void test_register_get_lambda_alias(void) {
     TEST_ASSERT_EQUAL_INT8(2, messageCallbacks);
 }
 
+
 void test_fault_double_space(void) {
     yalex_repl(&world, "1  2");
     TEST_ASSERT_SP_META_IS(NUM);
@@ -380,9 +404,14 @@ void test_fault_remove_interpreted(void) {
     TEST_ASSERT_NOT_EQUAL('+', world.stack[3].data.text[0]);
 }
 
+void test_fault_err_clears_owned_items(void) {
+    yalex_repl(&world, "1 resolve");
+    TEST_ASSERT_EQUAL_UINT8(0, world.sp);
+    TEST_ASSERT_EQUAL_INT8_MESSAGE(3, messageCallbacks, "3 -> ERROR token cause");
+}
+
 int main() {
-    UNITY_BEGIN();
-    
+    UnityBegin("YALEX_TESTS");
     RUN_TEST(test_repl_echo_negative);
 
     RUN_TEST(test_repl_echo_1);
@@ -390,8 +419,7 @@ int main() {
     RUN_TEST(test_repl_echo_10000);
     RUN_TEST(test_repl_echo_some_token);
     RUN_TEST(test_repl_echo_string);
-
-    RUN_TEST(test_basic_last_token_of_two);
+    RUN_TEST(test_repl_echo_last_token_of_two);
 
     RUN_TEST(test_basic_op_add);
     RUN_TEST(test_basic_op_sub);
@@ -412,6 +440,9 @@ int main() {
     RUN_TEST(test_basic_op_push);
     RUN_TEST(test_basic_op_dup);
 
+    RUN_TEST(test_basic_op_nop);
+    RUN_TEST(test_basic_op_);
+
     RUN_TEST(test_basic_op_select_true);
     RUN_TEST(test_basic_op_select_false);
 
@@ -428,6 +459,7 @@ int main() {
     RUN_TEST(test_pack_lambda_undef);
     RUN_TEST(test_pack_lambda_deferred_no_exec);
     RUN_TEST(test_pack_lambda_deferred_exec);
+    RUN_TEST(test_pack_lambda_deferred_resolve);
 
     RUN_TEST(test_register_set);
     RUN_TEST(test_register_set_lambda_alias);
@@ -436,12 +468,11 @@ int main() {
 
     RUN_TEST(test_fault_whitespace);
     RUN_TEST(test_fault_double_space);
-    RUN_TEST(test_fault_remove_interpreted); 
-
-    
-
-
+    RUN_TEST(test_fault_remove_interpreted);
+    RUN_TEST(test_fault_err_clears_owned_items);
     int ret = UNITY_END();
+
     getchar();
+
     return ret;
 }

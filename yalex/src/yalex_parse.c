@@ -142,6 +142,14 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
                     SP.meta = YALEX_TOKEN_LAMBDA_DEFERRED;
                 }
             }
+            for (int i = 0; i < YALEX_SIZE_SYS_LAMBDAS_STACK; i++) {
+                if (strcmp(token, yalex_system()->lambdas[i].name) == 0) {
+                    SP.meta = YALEX_TOKEN_LAMBDA;
+                }
+                if (token[0] == '\'') {
+                    SP.meta = YALEX_TOKEN_LAMBDA_DEFERRED;
+                }
+            }
 
             if (token[0] == '$') {
                 SP.meta = YALEX_TOKEN_LAMBDA;
@@ -155,9 +163,9 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
 }
 
 void yalex_parse(yalex_world *world, const char* repltext) {
-    char buffer[YALEX_SIZE_LAMBDA_STACK_STR];
-    memset(buffer, 0, YALEX_SIZE_LAMBDA_STACK_STR);
-    strcpy_s(buffer, YALEX_SIZE_LAMBDA_STACK_STR, repltext);
+    char buffer[YALEX_SIZE_REPL_STR];
+    memset(buffer, 0, YALEX_SIZE_REPL_STR);
+    strcpy_s(buffer, YALEX_SIZE_REPL_STR, repltext);
     char *code = &buffer[0];
     lambda lm;
     parse_state parseState;
