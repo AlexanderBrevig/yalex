@@ -70,8 +70,8 @@ void token_print_exec(yalex_world *world, stack_item **out) {
 
 void token_peek_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
-    numeric_type* addr = out[0]->data.number; 
-    SP.data.number = (numeric_type)(*addr); //cast address to pointer, then deref
+    numeric_type* addr = out[0]->data.number;
+    SP.data.number = (numeric_type) (*addr); //cast address to pointer, then deref
     SP.meta = YALEX_TOKEN_NUM;
 }
 
@@ -82,8 +82,14 @@ void token_select_exec(yalex_world *world, stack_item **out) {
                    || (out[2]->meta == YALEX_TOKEN_NAN && strlen(out[2]->data.text) > 0));
 
     SP.meta = out[truthy]->meta;
+    
     if (SP.meta == YALEX_TOKEN_NUM) {
         SP.data.number = out[truthy]->data.number;
+    } else if (SP.meta == YALEX_TOKEN_LAMBDA_DEFERRED) {
+        SP.meta = YALEX_TOKEN_LAMBDA;
+        char *target = SP.data.text;
+        char *src = &out[truthy]->data.text[1];
+        strcpy_s(target, YALEX_SIZE_TOKEN_STR, src);
     } else {
         char *target = SP.data.text;
         char *src = out[truthy]->data.text;
@@ -149,8 +155,12 @@ void token_regset_exec(yalex_world *world, stack_item **out) {
 void token_regget_exec(yalex_world *world, stack_item **out) {
     char *name = world->stack[world->sp + 1].data.text;
     unsigned char idx = name[1] - '0';
-    yalex_stack_push_sp(world);
-    SP.meta = YALEX_TOKEN_NUM;
-    SP.data.number = world->registers[idx];
-    //microlang_push_sp(world);
+    if (idx >= YALEX_SIZE_REGISTERS) {
+        int  x = 0;
+    } else {
+        yalex_stack_push_sp(world);
+        SP.meta = YALEX_TOKEN_NUM;
+        SP.data.number = world->registers[idx];
+        //microlang_push_sp(world);
+    }
 }

@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #ifndef YALEX_SIZE_STACK
-#define YALEX_SIZE_STACK 20
+#define YALEX_SIZE_STACK 200
 #endif
 #ifndef YALEX_SIZE_TOKEN_STR
 #define YALEX_SIZE_TOKEN_STR 16
@@ -38,6 +38,7 @@ typedef long long address_type;
 #define YALEX_TOKEN_NUM 2
 #define YALEX_TOKEN_EVAL 3
 #define YALEX_TOKEN_LAMBDA 4
+#define YALEX_TOKEN_LAMBDA_DEFERRED 5
 
 #define YALEX_EVAL_OK 1
 #define YALEX_EVAL_ERR_STACK_SHALLOW -1

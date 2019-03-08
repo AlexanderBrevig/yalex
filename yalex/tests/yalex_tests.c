@@ -307,6 +307,20 @@ void test_pack_lambda_undef(void) {
     TEST_ASSERT_EQUAL_STRING_MESSAGE("tok3", world.lambdas[world.lm - 1].name, "after remove, current lambda should be tok3");
     TEST_ASSERT_EQUAL_INT8_MESSAGE(0, world.sp, "should evaluate and add nothing to stack");
 }
+void test_pack_lambda_deferred_no_exec(void) {
+    yalex_repl(&world, ":tok (42)");
+    yalex_repl(&world, "2 1 < 'tok 1 select");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_STRING("1", buffer);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
+void test_pack_lambda_deferred_exec(void) {
+    yalex_repl(&world, ":tok (42)");
+    yalex_repl(&world, "2 1 > 'tok 1 select");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_STRING("42", buffer);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
 
 void test_register_set(void) {
     yalex_repl(&world, "1 R0S");
@@ -348,7 +362,8 @@ void test_fault_remove_interpreted(void) {
 
 int main() {
     UNITY_BEGIN();
-
+    
+    
     RUN_TEST(test_repl_echo_negative);
 
     RUN_TEST(test_repl_echo_1);
@@ -392,15 +407,19 @@ int main() {
     RUN_TEST(test_pack_lambda_recall);
     RUN_TEST(test_pack_lambda_recall_twice);
     RUN_TEST(test_pack_lambda_undef);
+    RUN_TEST(test_pack_lambda_deferred_no_exec);
+    RUN_TEST(test_pack_lambda_deferred_exec);
 
     RUN_TEST(test_register_set);
     RUN_TEST(test_register_get);
 
     RUN_TEST(test_fault_whitespace);
     RUN_TEST(test_fault_double_space);
-    RUN_TEST(test_fault_remove_interpreted);
+    RUN_TEST(test_fault_remove_interpreted); 
 
     
+
+
     int ret = UNITY_END();
     getchar();
     return ret;
