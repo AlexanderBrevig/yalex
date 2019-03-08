@@ -14,9 +14,19 @@ int yalex(void) {
     replMessageCallback("welcome");
     char word[256];
     /**/
-    yalex_repl(&world, ":fibstep (R1R R2R + R3S R2R R1S R3R R2S R4R 1 + R4S rec)");
-    yalex_repl(&world, ":rec (R0R R4R 1 + < 'fibstep R3R select)");
-    yalex_repl(&world, ":fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec)");
+    yalex_repl(&world, ":nset (R0S)");
+    yalex_repl(&world, ":n (R0R)");
+    yalex_repl(&world, ":t1set (R1S)");
+    yalex_repl(&world, ":t1 (R1R)");
+    yalex_repl(&world, ":t2set (R2S)");
+    yalex_repl(&world, ":t2 (R2R)");
+    yalex_repl(&world, ":resset (R3S)");
+    yalex_repl(&world, ":res (R3R)");
+    yalex_repl(&world, ":iset (R4S)");
+    yalex_repl(&world, ":i (R4R)");
+    yalex_repl(&world, ":fibstep (t1 t2 + resset t2 t1set res t2set i 1 + iset rec)");
+    yalex_repl(&world, ":rec (n i 1 + < 'fibstep res select)");
+    yalex_repl(&world, ":fib (nset 0 t1set 1 t2set 0 resset 1 iset rec)");
 
     while (1) {
         word[0] = 0;
