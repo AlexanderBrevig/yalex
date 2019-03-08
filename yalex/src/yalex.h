@@ -2,12 +2,32 @@
 #define YALEX_H
 
 #include <ctype.h>
+#include "yalex_interop.h"
+
+#ifndef YALEX_NUMERIC_TYPE
+#define YALEX_NUMERIC_TYPE long long
+#endif
+
+#ifndef YALEX_ADDRESS_TYPE
+#define YALEX_ADDRESS_TYPE long long
+#endif
+
+#ifndef YALEXATON
+#define YALEXATON atoll
+#endif
+
+#ifndef YALEXNTOA
+#define YALEXNTOA yalex_lltoa_s
+#endif
+
+typedef YALEX_NUMERIC_TYPE numeric_type;
+typedef YALEX_ADDRESS_TYPE address_type;
 
 #ifndef YALEX_SIZE_STACK
 #define YALEX_SIZE_STACK 20000
 #endif
 #ifndef YALEX_SIZE_TOKEN_STR
-#define YALEX_SIZE_TOKEN_STR 16
+#define YALEX_SIZE_TOKEN_STR 21 // digits of numeric_type max 9,223,372,036,854,775,807 + 1
 #endif
 #ifndef YALEX_SIZE_MAX_DEPENDABLE_STACK
 #define YALEX_SIZE_MAX_DEPENDABLE_STACK 4
@@ -31,12 +51,6 @@
 #ifndef YALEX_SIZE_REGISTERS
 #define YALEX_SIZE_REGISTERS 16
 #endif
-
-#define YALEXATON atoll
-#define YALEXNTOA _ltoa_s
-
-typedef long long numeric_type;
-typedef long long address_type;
 
 #define YALEX_SIZE_TOKENS 20 + YALEX_SIZE_USER_TOKENS
 

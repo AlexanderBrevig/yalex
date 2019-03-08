@@ -150,15 +150,11 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
         #undef MICROLANG_PRE_AND_POST_SIZE__TEMP
     }
     yalex_print_str(world, "REGISTERS:");
-    char bufTotal[34 * YALEX_SIZE_REGISTERS];
-    bufTotal[0] = 0;
     for (unsigned char i = 0; i < YALEX_SIZE_REGISTERS; i++) {
-        char buf[32]; //TODO: which length for long long or x?
-        YALEXNTOA(world->registers[i], buf, 32, 10);
-        strcat_s(bufTotal, 34 * YALEX_SIZE_REGISTERS, buf);
-        strcat_s(bufTotal, 34 * YALEX_SIZE_REGISTERS, ", ");
+        char buf[YALEX_SIZE_TOKEN_STR]; //TODO: which length for long long or x?
+        YALEXNTOA(world->registers[i], buf, YALEX_SIZE_TOKEN_STR, 10);
+        yalex_print_str(world, buf);
     }
-    yalex_print_str(world, bufTotal);
     yalex_print_str(world, "/DUMP");
 }
 

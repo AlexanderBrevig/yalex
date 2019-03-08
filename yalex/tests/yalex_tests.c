@@ -4,15 +4,16 @@
 
 #include "..\Unity\src\unity.h"
 #include "..\src\yalex.h"
+//#include "..\src\yalex_interop.h"
 
 #define TEST_ASSERT_SP_META_IS(META) TEST_ASSERT_EQUAL_INT8_MESSAGE(world.stack[world.sp].meta, YALEX_TOKEN_##META, "Expected " #META " on stack")
 
 yalex_world world;
-#define BUFFER_SIZE 128
-char buffer[BUFFER_SIZE];
+#define TESTS_BUFFER_SIZE 128
+char buffer[TESTS_BUFFER_SIZE];
 char messageCallbacks = 0;
 void onMessageCallback(const char* ptr) {
-    memset(buffer, 0, BUFFER_SIZE);
+    memset(buffer, 0, TESTS_BUFFER_SIZE);
     //printf("\nMSG: '%s'\n",ptr);
     messageCallbacks++;
     char *p = (char *) ptr;
@@ -253,7 +254,7 @@ void test_basic_op_dump(void) {
     yalex_repl(&world, "1 2 3 dump");
     TEST_ASSERT_EQUAL_INT8(3, world.sp);
     TEST_ASSERT_EQUAL_INT8(1, world.lm);
-    TEST_ASSERT_EQUAL_INT8(10, messageCallbacks);
+    TEST_ASSERT_EQUAL_INT8(25, messageCallbacks);
 }
 
 void test_basic_op_clr(void) {
