@@ -88,19 +88,40 @@ Here it is, side by side a similar C implementation:
 
 ## Tested functionality
 
-	+ - * /
-	< > == !=
-	|| &&
-	dup push pop
-	print dump
-	peek
-	select
-	()
-	:lambda (1 1 +)
-	lambda
-	lambda:
-	1 R[0..15]S
-	R[0..15]R
+ Refer to my [TODO](TODO.md) document for more details.
+
+    LITERALS:
+        -1 0 10 0xff 
+        true false
+        "some string"
+
+	BINARY OPERANDS FOR TWO NUMBERS:
+        + - * /
+	    < > == !=
+	    || &&
+
+    STACK OPERATIONS:
+	    dup push pop clr
+        nop
+        _ (alias of 'nop, must be resolved by select or resolve)
+
+    MISCELLANEOUS:
+	    X print 
+        dump
+	    NUM peek
+	    NUM 'yes 'no select
+        "1 2 3" run
+
+    LAMBDAS:
+        'lambda resolve
+	    ()
+	    :lambda (1 1 +)
+	    lambda
+	    lambda:
+
+    REGISTERS:
+	    NUM R[0..15]S
+	    R[0..15]R
 
 ## Register custom C keyword
 
