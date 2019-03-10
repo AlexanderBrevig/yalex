@@ -1,7 +1,3 @@
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "yalex_tokens.h"
 #include "yalex_parse.h"
 
@@ -80,7 +76,7 @@ void token_select_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
     // since the "true" stack item is at index 1, and "false" at 0 - we can just use the bool check as index
     char truthy = ((out[2]->meta == YALEX_TOKEN_NUM && out[2]->data.number != 0)
-                   || (out[2]->meta == YALEX_TOKEN_NAN && strlen(out[2]->data.text) > 0));
+                   || (out[2]->meta == YALEX_TOKEN_NAN && YALEX_STRLEN(out[2]->data.text) > 0));
 
     SP.meta = out[truthy]->meta;
     
@@ -90,11 +86,11 @@ void token_select_exec(yalex_world *world, stack_item **out) {
         SP.meta = YALEX_TOKEN_LAMBDA;
         char *target = SP.data.text;
         char *src = &out[truthy]->data.text[1];
-        strcpy_s(target, YALEX_SIZE_TOKEN_STR, src);
+        YALEX_STRCPY(target, YALEX_SIZE_TOKEN_STR, src);
     } else {
         char *target = SP.data.text;
         char *src = out[truthy]->data.text;
-        strcpy_s(target, YALEX_SIZE_TOKEN_STR, src);
+        YALEX_STRCPY(target, YALEX_SIZE_TOKEN_STR, src);
     }
 }
 
@@ -103,7 +99,7 @@ void token_dup_helper(yalex_world *world, stack_item *out) {
     if (SP.meta == YALEX_TOKEN_NUM) {
         SP.data.number = out->data.number;
     } else {
-        strcpy_s(SP.data.text, YALEX_SIZE_TOKEN_STR, out->data.text);
+        YALEX_STRCPY(SP.data.text, YALEX_SIZE_TOKEN_STR, out->data.text);
     }
 }
 
@@ -125,7 +121,7 @@ void token_dup_exec(yalex_world *world, stack_item **out) {
 void token_resolve_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
     SP.meta = YALEX_TOKEN_LAMBDA;
-    strcpy_s(SP.data.text, YALEX_SIZE_TOKEN_STR, &SP.data.text[1]);
+    YALEX_STRCPY(SP.data.text, YALEX_SIZE_TOKEN_STR, &SP.data.text[1]);
 }
 
 void token_dump_exec(yalex_world *world, stack_item **out) {
@@ -142,18 +138,18 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
         const char * postfix = ")";
         char buf[MICROLANG_BUF_SIZE__TEMP];
         buf[0] = 0;
-        strcat_s(buf, MICROLANG_BUF_SIZE__TEMP, world->lambdas[i].name);
-        strcat_s(buf, MICROLANG_BUF_SIZE__TEMP, prefix);
-        strcat_s(buf, MICROLANG_BUF_SIZE__TEMP, world->lambdas[i].stack);
-        strcat_s(buf, MICROLANG_BUF_SIZE__TEMP, postfix);
+        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, world->lambdas[i].name);
+        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, prefix);
+        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, world->lambdas[i].stack);
+        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, postfix);
         yalex_print_str(world, buf);
         #undef MICROLANG_BUF_SIZE__TEMP
         #undef MICROLANG_PRE_AND_POST_SIZE__TEMP
     }
     yalex_print_str(world, "REGISTERS:");
     for (unsigned char i = 0; i < YALEX_SIZE_REGISTERS; i++) {
-        char buf[YALEX_SIZE_TOKEN_STR]; //TODO: which length for long long or x?
-        YALEXNTOA(world->registers[i], buf, YALEX_SIZE_TOKEN_STR, 10);
+        char buf[YALEX_SIZE_TOKEN_STR];
+        YALEX_NUM_TO_STR(world->registers[i], buf);
         yalex_print_str(world, buf);
     }
     yalex_print_str(world, "/DUMP");
@@ -189,7 +185,7 @@ void token_run_exec(yalex_world *world, stack_item **out) {
     char *prog = out[0]->data.text;
     if (prog[0] == '"') {
         prog++;
-        prog[strlen(prog) - 1 ] = 0;
+        prog[YALEX_STRLEN(prog) - 1 ] = 0;
         yalex_parse(world, prog);
     }
 }

@@ -32,9 +32,10 @@ I pledge to try and keep this TODO up to date with actual code.
 
 ## VERSION 1 RELEASE TASKS
 
+- [x] replace C dependencies which may not be available on target platforms (string, stdio, stdlib, ctype etc)
 - [ ] measure speed and memory footprint
 - [ ] optimize speed and memory footprint
-- [ ] replace C dependencies which may not be available on target platforms (string, stdio, stdlib, ctype etc)
+- [ ] test on STM32, Nordic, TI and Arduino Uno
 
 ## UNLIKELY
 

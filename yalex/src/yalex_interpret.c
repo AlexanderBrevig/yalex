@@ -1,17 +1,11 @@
-
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "yalex_interpret.h"
 #include "yalex_parse.h"
 #include "yalex_system.h"
 
 char yalex_interpret_token_find_symbol(yalex_world *world, const char *token, const char * require, stack_item **out, unsigned char tokens) {
-    if (strcmp(world->stack[world->sp + 1].data.text, token) == 0
+    if (YALEX_STRCMP(world->stack[world->sp + 1].data.text, token) == 0
         || (token[0] == 'R'
-            && strcmp(world->stack[world->sp + 1].data.text, "*") > 0
+           // && YALEX_STRCMP(world->stack[world->sp + 1].data.text, "*") > 0
             && token[2] == world->stack[world->sp + 1].data.text[2])) {
         if (world->sp >= tokens) {
             if (*require != -1) { //check requirements if specified
@@ -76,7 +70,7 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
     if (SP.meta == YALEX_TOKEN_LAMBDA) {
         char found = 0;
         for (int i = 0; i < YALEX_SIZE_LAMBDAS_STACK; i++) {
-            if (world->lambdas[i].name[0] && strcmp(world->lambdas[i].name, SP.data.text) == 0) {
+            if (world->lambdas[i].name[0] && YALEX_STRCMP(world->lambdas[i].name, SP.data.text) == 0) {
                 yalex_stack_pop_sp(world);
                 if (world->lambdas[i].name[0] == '$') {
                     world->lm--; //anonymous lambdas are one use only
@@ -87,7 +81,7 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
             }
         }
         for (int i = 0; i < YALEX_SIZE_SYS_LAMBDAS_STACK; i++) {
-            if (yalex_system()->lambdas[i].name[0] && strcmp(yalex_system()->lambdas[i].name, SP.data.text) == 0) {
+            if (yalex_system()->lambdas[i].name[0] && YALEX_STRCMP(yalex_system()->lambdas[i].name, SP.data.text) == 0) {
                 yalex_stack_pop_sp(world);
                 yalex_parse(world, yalex_system()->lambdas[i].stack);
                 found = 1;
@@ -95,13 +89,17 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
             }
         }
         if (found == 0) {
-            printf("error did not find lambda %s", SP.data.text);
+            char buf[26 + YALEX_SIZE_TOKEN_STR];
+            YALEX_STRCAT(buf, 26 + YALEX_SIZE_TOKEN_STR, "error did not find lambda ");
+            YALEX_STRCAT(buf, 26 + YALEX_SIZE_TOKEN_STR, SP.data.text);
+            yalex_print_err(world, buf);
             yalex_stack_pop_sp(world); //pop in order to stop inf loop
         }
         return 1;
     }
     return 0;
 }
+
 //#include "yalex_tokens.h"
 void yalex_interpret_sp(yalex_world *world) {
     //token_dump_exec(world, 0);

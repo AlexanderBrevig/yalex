@@ -4,7 +4,6 @@
 
 #include "..\Unity\src\unity.h"
 #include "..\src\yalex.h"
-//#include "..\src\yalex_interop.h"
 
 #define TEST_ASSERT_SP_META_IS(META) TEST_ASSERT_EQUAL_INT8_MESSAGE(world.stack[world.sp].meta, YALEX_TOKEN_##META, "Expected " #META " on stack")
 

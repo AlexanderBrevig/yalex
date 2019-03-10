@@ -1,6 +1,3 @@
-
-#include <string.h>
-
 #include "yalex_system.h"
 #include "yalex_tokens.h"
 #include "yalex_parse.h"
@@ -18,7 +15,7 @@ char yalex_system_token_register(yalex_world *world, const char* token, char *re
         yalex_system()->tokens[yalex_system()->tokenCount].requirements[i] = -1;
     }
     if (requirements) {
-        memcpy(yalex_system()->tokens[yalex_system()->tokenCount].requirements, requirements, requirementCount);
+        YALEX_STRCPY(yalex_system()->tokens[yalex_system()->tokenCount].requirements, requirementCount, requirements);
     }
     yalex_system()->tokens[yalex_system()->tokenCount].exec = exec;
     yalex_system()->tokenCount++;
@@ -26,8 +23,8 @@ char yalex_system_token_register(yalex_world *world, const char* token, char *re
 }
 
 void yalex_system_lambda_init(lambda *lm, const char* name, const char* stack) {
-    strcpy_s(lm->name, YALEX_SIZE_TOKEN_STR, name);
-    strcpy_s(lm->stack, YALEX_SIZE_TOKEN_STR, stack);
+    YALEX_STRCPY(lm->name, YALEX_SIZE_TOKEN_STR, name);
+    YALEX_STRCPY(lm->stack, YALEX_SIZE_TOKEN_STR, stack);
 }
 
 void yalex_system_init(yalex_world *world) {
