@@ -1,0 +1,64 @@
+#ifndef YALEX_CONFIG_H
+#define YALEX_CONFIG_H
+
+#ifndef YALEX_NUMERIC_TYPE
+#define YALEX_NUMERIC_TYPE long long
+#endif
+
+#ifndef YALEX_ADDRESS_TYPE
+#define YALEX_ADDRESS_TYPE long long
+#endif
+
+#ifndef YALEX_STRCPY
+#define YALEX_STRCPY yalex_strcpy  
+#endif
+#ifndef YALEX_STRCAT
+#define YALEX_STRCAT yalex_strcat
+#endif
+#ifndef YALEX_STRLEN
+#define YALEX_STRLEN yalex_strlen
+#endif
+#ifndef YALEX_STRCMP
+#define YALEX_STRCMP yalex_strcmp
+#endif
+#ifndef YALEX_MEMSET
+#define YALEX_MEMSET yalex_memset
+#endif
+#ifndef YALEX_NUM_TO_STR
+#define YALEX_NUM_TO_STR yalex_lltoa_s
+#endif
+#ifndef YALEX_STR_TO_NUM
+#define YALEX_STR_TO_NUM yalex_atoll_s
+#endif
+
+
+#ifndef YALEX_SIZE_STACK
+#define YALEX_SIZE_STACK 100
+#endif
+#ifndef YALEX_SIZE_TOKEN_STR
+#define YALEX_SIZE_TOKEN_STR 22 // digits of numeric_type max -9,223,372,036,854,775,807 + 1
+#endif
+#ifndef YALEX_SIZE_MAX_DEPENDABLE_STACK
+#define YALEX_SIZE_MAX_DEPENDABLE_STACK 4
+#endif
+#ifndef YALEX_SIZE_USER_TOKENS
+#define YALEX_SIZE_USER_TOKENS 10
+#endif
+#ifndef YALEX_SIZE_LAMBDA_STACK_STR
+#define YALEX_SIZE_LAMBDA_STACK_STR 64
+#endif
+#ifndef YALEX_SIZE_REPL_STR
+#define YALEX_SIZE_REPL_STR 128
+#endif
+
+#ifndef YALEX_SIZE_SYS_LAMBDAS_STACK
+#define YALEX_SIZE_SYS_LAMBDAS_STACK 5
+#endif
+#ifndef YALEX_SIZE_LAMBDAS_STACK
+#define YALEX_SIZE_LAMBDAS_STACK 20
+#endif
+#ifndef YALEX_SIZE_REGISTERS
+#define YALEX_SIZE_REGISTERS 16
+#endif
+
+#endif
