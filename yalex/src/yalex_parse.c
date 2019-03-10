@@ -12,7 +12,7 @@ void yalex_parse_state_init(parse_state *state) {
     state->lmnew = 0;
 }
 
-char * yalex_parse_string(yalex_world *world, parse_state *state, char *code) {
+char * yalex_parse_string(parse_state *state, char *code) {
     state->token[state->tokenIdx++] = *code;
     state->token[state->tokenIdx] = 0;
     code++;
@@ -21,7 +21,6 @@ char * yalex_parse_string(yalex_world *world, parse_state *state, char *code) {
         state->token[state->tokenIdx] = 0;
         if (*code == '"') break;
     } while (code++);
-    int  x = 0;
     state->tokenIsNumber = 0;
     return code;
 }
@@ -32,8 +31,7 @@ char * yalex_parse_lambda_def_undef(yalex_world *world, parse_state *state, lamb
         state->lmnew = lm;
         state->lambdaParseName = 1;
     } else {
-        unsigned char lmIdx = -1;
-        for (int i = 0; i < world->lm; i++) {
+        for (unsigned char i = 0; i < world->lm; i++) {
             if (YALEX_STRCMP(state->token, world->lambdas[i].name) == 0) {
                 for (int j = i + 1; j <= world->lm; j++) {
                     yalex_lambda_copy(&world->lambdas[j - 1], &world->lambdas[j]);
@@ -108,12 +106,12 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
     if (token[0] == 0) return;
     //push is a special case, we do not want it to be added to the stack
     //it transparently moves the SP up and retains the data that used to be there
-    if (strcmp(token, "push") == 0) {
+    if (YALEX_STRCMP(token, "push") == 0) {
         token_push_exec(world, 0);
     }
     //pop is a special case, we do not want it to be added to the stack
     //it transparently moves the SP down and retains the data that used to be there
-    else if (strcmp(token, "pop") == 0) {
+    else if (YALEX_STRCMP(token, "pop") == 0) {
         token_pop_exec(world, 0);
     } 
     else if (token[0] == 'R' && ISDIGIT(token[1]) && token[2] == 'S') {
@@ -184,7 +182,7 @@ void yalex_parse(yalex_world *world, const char* repltext) {
             //skip whitespace
         } else {
             if (*code == '"') { // start string parser
-                code = yalex_parse_string(world, &parseState, code);
+                code = yalex_parse_string(&parseState, code);
             } else if (*code == ' ' && parseState.lmnew == 0) {
                 yalex_parse_token_push_stack(world, parseState.token, parseState.tokenIsNumber);
                 yalex_parse_state_init(&parseState);
@@ -200,7 +198,7 @@ void yalex_parse(yalex_world *world, const char* repltext) {
                     } else {
                         // parse regular token if not currently parsing lambda stack
                         if (parseState.tokenIsNumber) {
-                            parseState.tokenIsNumber = (isdigit(*code) || (parseState.tokenIdx == 0 && *code == '-'));
+                            parseState.tokenIsNumber = (ISDIGIT(*code) || (parseState.tokenIdx == 0 && *code == '-'));
                         }
                         parseState.token[parseState.tokenIdx++] = *code;
                         parseState.token[parseState.tokenIdx] = 0;

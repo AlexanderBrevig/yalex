@@ -75,7 +75,7 @@ void yalex_lltoa_s(long long num, char buf[21]) {
 
     // Process individual digits 
     while (num != 0 && i < 20) {
-        int rem = num % 10;
+        char rem = num % 10;
         str[i++] = rem + '0';
         num = num / 10;
     }
@@ -122,7 +122,6 @@ void yalex_lltoa_s(long long num, char buf[21]) {
 
 //https://github.com/gcc-mirror/gcc/blob/master/libiberty/strtoll.c
 long long yalex_atoll_s(const char buf[22], int radix) {
-    char **endptr = 0;
     register const char *s = buf;
     register unsigned long long acc;
     register int c;

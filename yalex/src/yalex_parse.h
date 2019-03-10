@@ -3,6 +3,7 @@
 
 #include "yalex.h"
 
+#pragma pack(push, 1)
 typedef struct _parse_state {
     char token[YALEX_SIZE_TOKEN_STR];
     char tokenIsNumber;
@@ -11,10 +12,11 @@ typedef struct _parse_state {
     unsigned char lambdaStackIdx;
     unsigned char lambdaParseName;
 } parse_state;
+#pragma pack(pop)
 
 
 void yalex_parse_state_init(parse_state *state);
-char * yalex_parse_string(yalex_world *world, parse_state *state, char *code);
+char * yalex_parse_string(parse_state *state, char *code);
 char * yalex_parse_lambda_def_undef(yalex_world *world, parse_state *state, lambda *lm, char *code);
 char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *lm, char *code);
 void yalex_parse_token_push_stack(yalex_world *world, const char* token, char tokenIsNumber);

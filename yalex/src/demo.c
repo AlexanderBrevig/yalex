@@ -25,12 +25,11 @@ int yalex(void) {
         word[0] = 0;
         fgets(word, sizeof(word), stdin);
         yalex_repl(&world, word);
-        int x = 0;
     }
     return 0;
 }
 
-int main() {
+int main(void) {
     yalex();
     return 0;
 }

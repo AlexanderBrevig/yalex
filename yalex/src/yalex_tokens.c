@@ -154,13 +154,21 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
     }
     yalex_print_str(world, "/DUMP");
 }
-
+void token_reg_err(yalex_world *world, numeric_type idx) {
+    char buf[22];
+    buf[0] = 0;
+    YALEX_STRCAT(buf, 22, "No such register ");
+    char nbuf[4];
+    YALEX_NUM_TO_STR(idx, nbuf);
+    YALEX_STRCAT(buf, 22, nbuf);
+    yalex_print_err(world, buf);
+}
 void token_regset_exec(yalex_world *world, stack_item **out) {
     numeric_type idx = out[0]->data.number;
     if (idx < YALEX_SIZE_REGISTERS && idx >= 0) {
         world->registers[idx] = SP.data.number;
     } else {
-        int x = 0;
+        token_reg_err(world, idx);
     }
 }
 
@@ -173,7 +181,7 @@ void token_regget_exec(yalex_world *world, stack_item **out) {
         SP.data.number = world->registers[idx];
         //microlang_push_sp(world);
     } else {
-        int x = 0;
+        token_reg_err(world, idx);
     }
 }
 

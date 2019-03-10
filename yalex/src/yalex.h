@@ -83,6 +83,7 @@ typedef YALEX_ADDRESS_TYPE address_type;
 
 typedef void(*onResult)(const char* result);
 
+#pragma pack(push, 1)
 typedef struct _stack_item {
     char meta;
     union {
@@ -106,6 +107,7 @@ typedef struct _microlang_world {
     unsigned char sp;
     unsigned char lm;
 } yalex_world;
+#pragma pack(pop)
 
 void yalex_print_err(yalex_world *world, const char *str);
 void yalex_print_str(yalex_world *world, const char *str);
