@@ -10,6 +10,47 @@ Yalex uses the reverse polish notation and FORTH as it's main source of inspirat
 
 You always build up a stack of things and can use operators to modify said stack - and of course produce effects. In yalex, these operators are functions and one function can be the operand of another.
 
+## Get the code and start to play
+
+	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex/
+
+## Tested functionality
+
+ Refer to my [TODO](TODO.md) document for more details.
+
+    LITERALS:
+        -1 0 10 0xff 
+        true false
+        "some string"
+
+	BINARY OPERANDS FOR TWO NUMBERS:
+        + - * /
+	    < > == !=
+	    || &&
+
+    STACK OPERATIONS:
+	    dup push pop clr
+        nop
+        _ (alias of 'nop, must be resolved by select or resolve)
+
+    MISCELLANEOUS:
+	    X print 
+        dump
+	    NUM peek
+	    NUM 'yes 'no select
+        "1 2 3" run
+
+    LAMBDAS:
+        'lambda resolve
+	    ()
+	    :lambda (1 1 +)
+	    lambda
+	    lambda:
+
+    REGISTERS:
+	    NUM R[0..15]S
+	    R[0..15]R
+
 ## Code example; fibonacci
 
     :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)
@@ -81,47 +122,6 @@ Here it is, side by side a similar C implementation:
         // fib(10) = 55
         printf("fib(10) = %d", f); 
     }
-
-## Get the code and start to play
-
-	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex/
-
-## Tested functionality
-
- Refer to my [TODO](TODO.md) document for more details.
-
-    LITERALS:
-        -1 0 10 0xff 
-        true false
-        "some string"
-
-	BINARY OPERANDS FOR TWO NUMBERS:
-        + - * /
-	    < > == !=
-	    || &&
-
-    STACK OPERATIONS:
-	    dup push pop clr
-        nop
-        _ (alias of 'nop, must be resolved by select or resolve)
-
-    MISCELLANEOUS:
-	    X print 
-        dump
-	    NUM peek
-	    NUM 'yes 'no select
-        "1 2 3" run
-
-    LAMBDAS:
-        'lambda resolve
-	    ()
-	    :lambda (1 1 +)
-	    lambda
-	    lambda:
-
-    REGISTERS:
-	    NUM R[0..15]S
-	    R[0..15]R
 
 ## Register custom C keyword
 
