@@ -9,6 +9,13 @@
 #define YALEX_ADDRESS_TYPE long long
 #endif
 
+#ifndef YALEX_STACK_POINTER_TYPE
+#define YALEX_STACK_POINTER_TYPE unsigned char
+#endif
+#ifndef YALEX_LAMBDA_POINTER_TYPE
+#define YALEX_LAMBDA_POINTER_TYPE unsigned char
+#endif
+
 #ifndef YALEX_STRCPY
 #define YALEX_STRCPY yalex_strcpy  
 #endif
@@ -47,13 +54,7 @@
 #ifndef YALEX_SIZE_LAMBDA_STACK_STR
 #define YALEX_SIZE_LAMBDA_STACK_STR 64
 #endif
-#ifndef YALEX_SIZE_REPL_STR
-#define YALEX_SIZE_REPL_STR 128
-#endif
 
-#ifndef YALEX_SIZE_SYS_LAMBDAS_STACK
-#define YALEX_SIZE_SYS_LAMBDAS_STACK 5
-#endif
 #ifndef YALEX_SIZE_LAMBDAS_STACK
 #define YALEX_SIZE_LAMBDAS_STACK 20
 #endif

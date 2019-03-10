@@ -1,12 +1,14 @@
 #include "yalex_interop.h"
 
 int yalex_strlen(const char * str) {
+    if (str == 0) return 0;
     int len = 0;
     while (str[len]) len++;
     return len;
 }
 
 int yalex_strcat(char * to, unsigned int size, const char * from) {
+    if (to == 0 || from == 0 || size == 0) return 0;
     unsigned int i, j;
     for (i = 0; to[i] != '\0'; i++)
         ;
@@ -19,8 +21,9 @@ int yalex_strcat(char * to, unsigned int size, const char * from) {
 }
 
 int yalex_strcmp(const char * a, const char * b) {
+    if (a == 0 || b == 0) return -1;
     int offset = 0;
-    for (int i = 0; a[i] && a[i] != b[0] ; i++) {
+    for (int i = 0; a[i] && a[i] != b[0]; i++) {
         offset++;
         if (a[offset] == b[0]) {
             return offset;
@@ -37,6 +40,7 @@ int yalex_strcmp(const char * a, const char * b) {
 }
 
 int yalex_strcpy(char * to, unsigned int size, const char * from) {
+    if (to == 0 || from == 0 || size == 0) return 0;
     unsigned int i = 0;
     while (i < size && from[i]) {
         to[i] = from[i];
@@ -48,6 +52,7 @@ int yalex_strcpy(char * to, unsigned int size, const char * from) {
 }
 
 void * yalex_memset(void *s, int c, unsigned int n) {
+    if (s == 0) return 0;
     unsigned char* p = s;
     while (n--)
         *p++ = (unsigned char) c;
@@ -55,6 +60,7 @@ void * yalex_memset(void *s, int c, unsigned int n) {
 }
 
 void yalex_lltoa_s(long long num, char buf[21]) {
+    if (buf == 0) return;
     char str[21];
     int i = 0;
     char isNegative = 0;
@@ -120,7 +126,7 @@ void yalex_lltoa_s(long long num, char buf[21]) {
  * SUCH DAMAGE.
  */
 
-//https://github.com/gcc-mirror/gcc/blob/master/libiberty/strtoll.c
+ //https://github.com/gcc-mirror/gcc/blob/master/libiberty/strtoll.c
 long long yalex_atoll_s(const char buf[22], int radix) {
     register const char *s = buf;
     register unsigned long long acc;

@@ -8,7 +8,7 @@ void yalex_parse_state_init(parse_state *state) {
     state->tokenIsNumber = 1;
     state->tokenIdx = 0;
     state->lambdaStackIdx = 0;
-    yalex_memset(state->token, 0, YALEX_SIZE_TOKEN_STR);
+    YALEX_MEMSET(state->token, 0, YALEX_SIZE_TOKEN_STR);
     state->lmnew = 0;
 }
 
@@ -40,7 +40,7 @@ char * yalex_parse_lambda_def_undef(yalex_world *world, parse_state *state, lamb
             }
         }
 
-        yalex_memset(state->token, 0, YALEX_SIZE_TOKEN_STR);
+        YALEX_MEMSET(state->token, 0, YALEX_SIZE_TOKEN_STR);
     }
     return code;
 }
@@ -55,7 +55,8 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
         return code;
     } else if (*code == ')') {
         //close lambda parser and add
-        if (world->lm + 1 < YALEX_SIZE_LAMBDAS_STACK) {
+        if (world->lm + 1 < YALEX_SIZE_LAMBDAS_STACK
+            && state->lmnew) {
             lambda *lmcpy = 0;
             for (int i = 0; i < YALEX_SIZE_LAMBDAS_STACK; i++) {
                 if (YALEX_STRLEN(state->lmnew->name) > 0 && YALEX_STRCMP(world->lambdas[i].name, state->lmnew->name) == 0) {
@@ -63,7 +64,7 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
                 }
             }
             if (lmcpy == 0) {
-                lmcpy = &world->lambdas[world->lm++]; 
+                lmcpy = &world->lambdas[world->lm++];
             }
             if (state->lmnew->requirements[0]) { YALEX_STRCPY(lmcpy->requirements, YALEX_SIZE_MAX_DEPENDABLE_STACK, state->lmnew->requirements); }
             if (state->lmnew->stack[0]) { YALEX_STRCPY(lmcpy->stack, YALEX_SIZE_LAMBDA_STACK_STR, state->lmnew->stack); }
@@ -94,8 +95,12 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
             state->lambdaStackIdx = 0;
         } else {
             //find out what is building
-            state->lmnew->stack[state->lambdaStackIdx++] = *code;
-            state->lmnew->stack[state->lambdaStackIdx] = 0;
+            if (state->lambdaStackIdx + 1 < YALEX_SIZE_LAMBDA_STACK_STR) {
+                state->lmnew->stack[state->lambdaStackIdx++] = *code;
+                state->lmnew->stack[state->lambdaStackIdx] = 0;
+            } else {
+                YALEX_STRCPY(state->lmnew->stack, YALEX_SIZE_LAMBDA_STACK_STR, "ERROR_LAMBDA_STACK_TOO_LONG");
+            }
         }
         return code;
     }
@@ -113,8 +118,7 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
     //it transparently moves the SP down and retains the data that used to be there
     else if (YALEX_STRCMP(token, "pop") == 0) {
         token_pop_exec(world, 0);
-    } 
-    else if (token[0] == 'R' && ISDIGIT(token[1]) && token[2] == 'S') {
+    } else if (token[0] == 'R' && ISDIGIT(token[1]) && token[2] == 'S') {
         stack_item dummy;
         dummy.data.number = token[1] - '0';
 
@@ -170,10 +174,7 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
 }
 
 void yalex_parse(yalex_world *world, const char* repltext) {
-    char buffer[YALEX_SIZE_REPL_STR];
-    YALEX_MEMSET(buffer, 0, YALEX_SIZE_REPL_STR);
-    YALEX_STRCPY(buffer, YALEX_SIZE_REPL_STR, repltext);
-    char *code = &buffer[0];
+    char *code = repltext;
     lambda lm;
     parse_state parseState;
     yalex_parse_state_init(&parseState);
@@ -184,11 +185,13 @@ void yalex_parse(yalex_world *world, const char* repltext) {
             if (*code == '"') { // start string parser
                 code = yalex_parse_string(&parseState, code);
             } else if (*code == ' ' && parseState.lmnew == 0) {
+                char *codeBefore = code;
                 yalex_parse_token_push_stack(world, parseState.token, parseState.tokenIsNumber);
                 yalex_parse_state_init(&parseState);
+                code = codeBefore;
             } else if (*code == ':' && parseState.lmnew == 0) {
                 code = yalex_parse_lambda_def_undef(world, &parseState, &lm, code);
-            } else {    
+            } else {
                 if (parseState.tokenIdx + 1 == YALEX_SIZE_TOKEN_STR) {
                     yalex_print_err(world, "Error: token too long");
                 } else {

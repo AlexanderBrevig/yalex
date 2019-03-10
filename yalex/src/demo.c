@@ -6,10 +6,14 @@
 void replMessageCallback(const char* ptr) {
     if (ptr && strlen(ptr) > 0) { printf("%s\n", ptr); }
 }
-
+#define SIZEOF(item) printf("Size of %s: %d bytes\n", #item, sizeof(item))
 int yalex(void) {
     yalex_world world;
     yalex_init(&world, replMessageCallback);
+
+    SIZEOF(world);
+    SIZEOF(world.stack[0]);
+    SIZEOF(world.lambdas[0]);
 
     replMessageCallback("yalex 1.0beta");
 
@@ -18,10 +22,7 @@ int yalex(void) {
     yalex_repl(&world, ":start (R0R 1 - R0S pop rec pop pop pop pop pop pop R3R)");
     yalex_repl(&world, ":fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S R0R 3 < 1 'start select)");
     
-             
-                   
-
-    char word[YALEX_SIZE_REPL_STR];
+    char word[128];
     while (1) {
         word[0] = 0;
         fgets(word, sizeof(word), stdin);

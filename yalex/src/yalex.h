@@ -7,6 +7,8 @@
 typedef YALEX_NUMERIC_TYPE numeric_type;
 typedef YALEX_ADDRESS_TYPE address_type;
 
+#define YALEX_SIZE_SYS_LAMBDAS_STACK 5
+
 #define YALEX_SIZE_TOKENS 20 + YALEX_SIZE_USER_TOKENS
 
 #define YALEX_TOKEN_UNDEFINED 0
@@ -45,8 +47,8 @@ typedef struct _microlang_world {
     stack_item stack[YALEX_SIZE_STACK];
     lambda lambdas[YALEX_SIZE_LAMBDAS_STACK];
     numeric_type registers[YALEX_SIZE_REGISTERS];
-    unsigned char sp;
-    unsigned char lm;
+    YALEX_STACK_POINTER_TYPE sp;
+    YALEX_LAMBDA_POINTER_TYPE lm;
     #ifdef YALEX_DEBUG
     unsigned int spMax;
     #endif
