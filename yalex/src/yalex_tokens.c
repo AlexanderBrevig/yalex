@@ -125,7 +125,7 @@ void token_resolve_exec(yalex_world *world, stack_item **out) {
 }
 
 void token_dump_exec(yalex_world *world, stack_item **out) {
-    yalex_print_str(world, "DUMP\nSTACK:");
+    yalex_print_str(world, "DUMP:");
     for (unsigned char i = 1; i <= world->sp; i++) {
         yalex_print_token(world, &world->stack[i]);
     }
@@ -149,8 +149,17 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
     yalex_print_str(world, "REGISTERS:");
     for (unsigned char i = 0; i < YALEX_SIZE_REGISTERS; i++) {
         char buf[YALEX_SIZE_TOKEN_STR];
+        char print[YALEX_SIZE_TOKEN_STR + 10];
+        buf[0] = 0;
+        print[0] = 0;
+        YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, "R");
+        YALEX_NUM_TO_STR((numeric_type)i, buf);
+        YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, buf);
+        YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, ":\t");
         YALEX_NUM_TO_STR(world->registers[i], buf);
-        yalex_print_str(world, buf);
+        YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, buf);
+
+        yalex_print_str(world, print);
     }
     yalex_print_str(world, "/DUMP");
 }

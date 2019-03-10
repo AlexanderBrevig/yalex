@@ -106,6 +106,9 @@ typedef struct _microlang_world {
     numeric_type registers[YALEX_SIZE_REGISTERS];
     unsigned char sp;
     unsigned char lm;
+    #ifdef YALEX_DEBUG
+    unsigned int spMax;
+    #endif
 } yalex_world;
 #pragma pack(pop)
 

@@ -13,7 +13,9 @@ char buffer[TESTS_BUFFER_SIZE];
 char messageCallbacks = 0;
 void onMessageCallback(const char* ptr) {
     memset(buffer, 0, TESTS_BUFFER_SIZE);
-    //printf("\nMSG: '%s'\n",ptr);
+    #ifdef YALEX_DEBUG
+    printf("\t%s\n",ptr);
+    #endif
     messageCallbacks++;
     char *p = (char *) ptr;
     char *b = &buffer[0];

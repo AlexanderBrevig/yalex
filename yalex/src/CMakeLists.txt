@@ -2,7 +2,7 @@ file(GLOB SOURCES ./*.c)
 
 file(GLOB LIB_SRC ./*.c)
 
-add_definitions(/Wall) #VS2017 hackish
+#add_definitions(/Wall) #VS2017 hackish
 
 list(REMOVE_ITEM LIB_SRC "/demo.c")
 
