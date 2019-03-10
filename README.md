@@ -125,6 +125,11 @@ Here it is, side by side a similar C implementation:
 
 ## Register custom C keyword
 
+	#include <stdio.h>
+	#include <string.h>
+
+	#include "yalex.h"
+	
 	void replMessageCallback(const char* ptr) { printf("%s\n", ptr); }
 
 	// sample implementation of the && / and token
@@ -133,7 +138,7 @@ Here it is, side by side a similar C implementation:
 		//out gives you tokens down into the stack
 		//out[1] is the first token we wrote out[0] the second
 		SP.data.number = (out[1]->data.number && out[0]->data.number) ? 1 : 0;
-		SP.meta = MICROLANG_NUM;
+		SP.meta = YALEX_TOKEN_NUM;
 	}
 
 	int main() {
@@ -141,12 +146,21 @@ Here it is, side by side a similar C implementation:
 		yalex_world world;
 		yalex_init(&world, replMessageCallback);
 
+		// in order for the `and` to work, we need two numbers to be on the stack
+		// types here https://github.com/AlexanderBrevig/yalex/blob/master/yalex/src/yalex.h#L71
+		char and_required_tokens[2] = { YALEX_TOKEN_NUM, YALEX_TOKEN_NUM };
 		//register a new system token
-		char basic_op_req[2] = { MICROLANG_NUM, MICROLANG_NUM };
-		// in order for the and to work, we need two numbers to be on the stack
-		yalex_system_token_register(&world, "and", basic_op_req, 2, sample_token_and_exec);
+		yalex_system_token_register("and", and_required_tokens, 2, sample_token_and_exec);
 
 		//test it!
 		yalex_repl(&world, "1 1 and"); //prints 1
 		yalex_repl(&world, "1 0 and"); //prints 0
+		
+		char word[YALEX_SIZE_REPL_STR];
+		while (1) {
+			word[0] = 0;
+			fgets(word, sizeof(word), stdin);
+			yalex_repl(&world, word);
+		}
+		return 0;
 	}
