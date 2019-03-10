@@ -10,11 +10,12 @@ Yalex uses the reverse polish notation and FORTH as it's main source of inspirat
 
 You always build up a stack of things and can use operators to modify said stack - and of course produce effects. In yalex, these operators are functions and one function can be the operand of another.
 
-## Code example; (almost) fibonacci
+## Code example; fibonacci
 
     :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)
     :rec (R4R R0R 1 + < 'fibstep _ select)
-    :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec pop pop pop pop pop pop R3R)
+    :start (R0R 1 - R0S pop rec pop pop pop pop pop pop R3R)
+    :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S R0R 3 < 1 'start select)
 
 Here it is, side by side a similar C implementation:
 
@@ -22,9 +23,10 @@ Here it is, side by side a similar C implementation:
     /*  
         :fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)
         :rec (R4R R0R 1 + < 'fibstep _ select)
-        :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S rec pop pop pop pop pop pop R3R)
+        :start (R0R 1 - R0S pop rec pop pop pop pop pop pop R3R)
+        :fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S R0R 3 < 1 'start select)
         10 fib
-        89
+        55
     */
     /// register declarations
     int n;            // R0
@@ -34,7 +36,6 @@ Here it is, side by side a similar C implementation:
     int i;            // R4
 
     void fibstep() {
-       
         nextTerm = t1 + t2; // R1R R2R + R3S pop
         t1 = t2;			// R2R R1S pop
         t2 = nextTerm;		// R3R R2S pop
@@ -53,6 +54,13 @@ Here it is, side by side a similar C implementation:
                             // select is the if keyword 
     }
 
+    int start() {
+        n = n-1;            // R0R 1 - R0S pop
+        rec();              // rec
+                            // pop pop pop pop pop pop (cleans up stack)
+        return nextTerm;    // R3R
+    }
+
     int fib(int el)     
     {   
         n = el;             // R0S //reads previous stack item as input
@@ -60,15 +68,17 @@ Here it is, side by side a similar C implementation:
         t2 = 1;             // 1 R2S
         nextTerm = 0;       // 0 R3S
         i = 1;              // 1 R4S
-        rec();              // rec
-                            // pop pop pop pop pop pop 
-        return nextTerm;    // R3R
+        if (i < 3) {        // R0R 3 <
+            return 1;       // 1
+        } else {
+            return start(); // 'start
+        }
     }
 
     int main() {
         int f = fib(10);    // 10 fib
 
-        // fib(10) = 89
+        // fib(10) = 55
         printf("fib(10) = %d", f); 
     }
 

@@ -14,7 +14,7 @@ char messageCallbacks = 0;
 void onMessageCallback(const char* ptr) {
     memset(buffer, 0, TESTS_BUFFER_SIZE);
     #ifdef YALEX_DEBUG
-    printf("\t%s\n",ptr);
+    printf("\t%s\n", ptr);
     #endif
     messageCallbacks++;
     char *p = (char *) ptr;
@@ -451,6 +451,19 @@ void test_fault_err_clears_owned_items(void) {
     TEST_ASSERT_EQUAL_INT8_MESSAGE(3, messageCallbacks, "3 -> ERROR token cause");
 }
 
+void test_fibonacci(void) {
+    yalex_repl(&world, ":fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)");
+    yalex_repl(&world, ":rec (R4R R0R 1 + < 'fibstep _ select)");
+    yalex_repl(&world, ":start (R0R 1 - R0S pop rec pop pop pop pop pop pop R3R)");
+    yalex_repl(&world, ":fib (R0S 0 R1S 1 R2S 0 R3S 1 R4S R0R 3 < 1 'start select)");
+    yalex_repl(&world, "50 fib");
+
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_UINT8(1, world.sp);
+    TEST_ASSERT_EQUAL_STRING("12586269025", buffer);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
+
 int main() {
     UnityBegin("YALEX_TESTS");
     RUN_TEST(test_parse_negative);
@@ -518,6 +531,8 @@ int main() {
     RUN_TEST(test_fault_double_space);
     RUN_TEST(test_fault_remove_interpreted);
     RUN_TEST(test_fault_err_clears_owned_items);
+
+    RUN_TEST(test_fibonacci);
     int ret = UNITY_END();
 
     getchar();
