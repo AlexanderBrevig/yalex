@@ -203,6 +203,8 @@ void token_run_exec(yalex_world *world, stack_item **out) {
     if (prog[0] == '"') {
         prog++;
         prog[YALEX_STRLEN(prog) - 1 ] = 0;
-        yalex_parse(world, prog);
+        char buf[YALEX_SIZE_TOKEN_STR];
+        YALEX_STRCPY(buf, YALEX_SIZE_TOKEN_STR, prog);
+        yalex_parse(world, buf);
     }
 }
