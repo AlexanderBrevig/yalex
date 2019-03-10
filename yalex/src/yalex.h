@@ -20,11 +20,15 @@
 #define YALEXNTOA yalex_lltoa_s
 #endif
 
+#ifndef YALEXSTRTOLL
+#define YALEXSTRTOLL strtoll
+#endif
+
 typedef YALEX_NUMERIC_TYPE numeric_type;
 typedef YALEX_ADDRESS_TYPE address_type;
 
 #ifndef YALEX_SIZE_STACK
-#define YALEX_SIZE_STACK 20000
+#define YALEX_SIZE_STACK 100
 #endif
 #ifndef YALEX_SIZE_TOKEN_STR
 #define YALEX_SIZE_TOKEN_STR 21 // digits of numeric_type max 9,223,372,036,854,775,807 + 1

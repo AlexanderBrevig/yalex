@@ -25,5 +25,6 @@ void token_dump_exec(yalex_world *world, stack_item **out);
 void token_regset_exec(yalex_world *world, stack_item **out);
 void token_regget_exec(yalex_world *world, stack_item **out);
 void token_clr_exec(yalex_world *world, stack_item **out);
+void token_run_exec(yalex_world *world, stack_item **out);
 
 #endif

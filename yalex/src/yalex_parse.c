@@ -61,7 +61,15 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
     } else if (*code == ')') {
         //close lambda parser and add
         if (world->lm + 1 < YALEX_SIZE_LAMBDAS_STACK) {
-            lambda *lmcpy = &world->lambdas[world->lm++];
+            lambda *lmcpy = 0;
+            for (int i = 0; i < YALEX_SIZE_LAMBDAS_STACK; i++) {
+                if (strlen(state->lmnew->name) > 0 && strcmp(world->lambdas[i].name, state->lmnew->name) == 0) {
+                    lmcpy = &world->lambdas[i];
+                }
+            }
+            if (lmcpy == 0) {
+                lmcpy = &world->lambdas[world->lm++]; 
+            }
             if (state->lmnew->requirements[0]) { strcpy_s(lmcpy->requirements, YALEX_SIZE_MAX_DEPENDABLE_STACK, state->lmnew->requirements); }
             if (state->lmnew->stack[0]) { strcpy_s(lmcpy->stack, YALEX_SIZE_LAMBDA_STACK_STR, state->lmnew->stack); }
             lmcpy->requirementCount = state->lmnew->requirementCount;
@@ -124,6 +132,11 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
             || (tokenIsNumber && token[0] == '-' && strlen(token) > 1)) {
             SP.meta = YALEX_TOKEN_NUM;
             SP.data.number = YALEXATON(token);
+        } else if (token[0] == '0' && token[1] == 'x') {
+            char *eptr = 0;
+            numeric_type number = YALEXSTRTOLL(token, &eptr, 16);
+            SP.meta = YALEX_TOKEN_NUM;
+            SP.data.number = number;
         } else {
             SP.meta = YALEX_TOKEN_NAN;
 

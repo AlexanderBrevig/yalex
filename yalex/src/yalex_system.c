@@ -3,6 +3,7 @@
 
 #include "yalex_system.h"
 #include "yalex_tokens.h"
+#include "yalex_parse.h"
 
 yalex_sys *yalex_system() {
     static yalex_sys system;
@@ -50,6 +51,8 @@ void yalex_system_init(yalex_world *world) {
     yalex_system_token_register(world, "dup", 0, 1, token_dup_exec);
 
     yalex_system_token_register(world, "clr", 0, 0, token_clr_exec);
+    char basic_run_req[1] = { YALEX_TOKEN_NAN };
+    yalex_system_token_register(world, "run", basic_run_req, 1, token_run_exec);
     
 
     char basic_resolve_req[1] = { YALEX_TOKEN_LAMBDA_DEFERRED };
@@ -62,7 +65,7 @@ void yalex_system_init(yalex_world *world) {
     /// Configure lambdas
 
     for (size_t i = 0; i < YALEX_SIZE_SYS_LAMBDAS_STACK; i++) {
-        yalex_lambda_init(yalex_system()->lambdas[i]);
+        yalex_lambda_init(&yalex_system()->lambdas[i]);
     }
     int idx = 0;
     yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "nop", "()");

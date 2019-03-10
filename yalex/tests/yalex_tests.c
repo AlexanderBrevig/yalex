@@ -32,24 +32,31 @@ void setUp(void) {
 }
 void tearDown(void) {}
 
-#define DEF_ECHO(literal) \
-	void test_repl_echo_##literal(void) { \
+#define DEF_PARSE(literal) \
+	void test_parse_##literal(void) { \
 		const char * testString = #literal; yalex_repl(&world, testString);	TEST_ASSERT_EQUAL_STRING(testString, buffer); \
 	} \
 
-DEF_ECHO(1)
-DEF_ECHO(2)
-DEF_ECHO(10000)
-DEF_ECHO(some_token)
+DEF_PARSE(1)
+DEF_PARSE(2)
+DEF_PARSE(10000)
+DEF_PARSE(some_token)
 
-void test_repl_echo_negative(void) {
+void test_parse_negative(void) {
     const char * testString = "-10";
     yalex_repl(&world, testString);
     TEST_ASSERT_EQUAL_STRING(testString, buffer);
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 
-void test_repl_echo_string(void) {
+void test_parse_hex(void) {
+    yalex_repl(&world, "0xFF");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_STRING("255", buffer);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
+
+void test_parse_string(void) {
     const char * testString = "\"hello world\"";
     yalex_repl(&world, testString);
     TEST_ASSERT_SP_META_IS(NAN);
@@ -57,7 +64,7 @@ void test_repl_echo_string(void) {
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 
-void test_repl_echo_last_token_of_two(void) {
+void test_parse_echo_last_token_of_two(void) {
     yalex_repl(&world, "1 2");
     TEST_ASSERT_SP_META_IS(NUM);
     TEST_ASSERT_EQUAL_STRING("2", buffer);
@@ -187,7 +194,7 @@ void test_basic_op_peek(void) {
     char prog[128] = { 0 };
     strcat_s(prog, 128, addr);
     strcat_s(prog, 128, " peek");
-    numeric_type *p = (numeric_type) y;
+    numeric_type *p = (numeric_type*) y;
     TEST_ASSERT_EQUAL_INT8(x, *p);
     yalex_repl(&world, prog); //something like `923514 peek`
     TEST_ASSERT_SP_META_IS(NUM);
@@ -271,6 +278,14 @@ void test_basic_op_clr(void) {
     TEST_ASSERT_EQUAL(0, world.sp);
 }
 
+void test_basic_op_run(void) {
+    yalex_repl(&world, "\"1 2 3\" run");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL(3, world.sp);
+    TEST_ASSERT_EQUAL_STRING("3", buffer);
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
+}
+
 /// Stack pack
 void test_pack_empty_is_assigned_and_removed_if_called(void) {
     yalex_repl(&world, "()");
@@ -309,6 +324,16 @@ void test_pack_as_lambda(void) {
     TEST_ASSERT_EQUAL_INT8_MESSAGE(0, world.sp, "should evaluate and add nothing to stack");
     TEST_ASSERT_EQUAL_INT8_MESSAGE(1, world.lm, "should define and add to lambdas");
     TEST_ASSERT_EQUAL_INT8_MESSAGE(0, messageCallbacks, "There should only be no callback for defining a lambda");
+}
+void test_pack_lambda_redef(void) {
+    yalex_repl(&world, ":tok (42)");
+    yalex_repl(&world, ":tok (12)");
+    yalex_repl(&world, "tok");
+    TEST_ASSERT_SP_META_IS(NUM);
+    TEST_ASSERT_EQUAL_INT8_MESSAGE(1, world.sp, "should leave 12 on stack after redefine");
+    TEST_ASSERT_EQUAL_INT8_MESSAGE(1, world.lm, "should define one lambda");
+    TEST_ASSERT_EQUAL_STRING_MESSAGE("12", buffer, "should leave 12 on stack and then print");
+    TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
 void test_pack_lambda_recall(void) {
     yalex_repl(&world, ":tok (42)");
@@ -427,14 +452,15 @@ void test_fault_err_clears_owned_items(void) {
 
 int main() {
     UnityBegin("YALEX_TESTS");
-    RUN_TEST(test_repl_echo_negative);
+    RUN_TEST(test_parse_negative);
 
-    RUN_TEST(test_repl_echo_1);
-    RUN_TEST(test_repl_echo_2);
-    RUN_TEST(test_repl_echo_10000);
-    RUN_TEST(test_repl_echo_some_token);
-    RUN_TEST(test_repl_echo_string);
-    RUN_TEST(test_repl_echo_last_token_of_two);
+    RUN_TEST(test_parse_1);
+    RUN_TEST(test_parse_2);
+    RUN_TEST(test_parse_10000);
+    RUN_TEST(test_parse_some_token);
+    RUN_TEST(test_parse_string);
+    RUN_TEST(test_parse_echo_last_token_of_two);
+    RUN_TEST(test_parse_hex);
 
     RUN_TEST(test_basic_op_add);
     RUN_TEST(test_basic_op_sub);
@@ -466,11 +492,15 @@ int main() {
 
     RUN_TEST(test_basic_op_clr);
 
+    RUN_TEST(test_basic_op_run);
+
+
     RUN_TEST(test_pack_empty_is_assigned_and_removed_if_called);
     RUN_TEST(test_pack_anonymous_is_resolved);
     RUN_TEST(test_pack_two_anonymous_is_resolved);
     RUN_TEST(test_pack_two_anonymous_is_resolved_then_add);
     RUN_TEST(test_pack_as_lambda);
+    RUN_TEST(test_pack_lambda_redef);
     RUN_TEST(test_pack_lambda_recall);
     RUN_TEST(test_pack_lambda_recall_twice);
     RUN_TEST(test_pack_lambda_undef);
@@ -482,7 +512,7 @@ int main() {
     RUN_TEST(test_register_set_lambda_alias);
     RUN_TEST(test_register_get);
     RUN_TEST(test_register_get_lambda_alias);
-    
+
     RUN_TEST(test_fault_whitespace);
     RUN_TEST(test_fault_double_space);
     RUN_TEST(test_fault_remove_interpreted);

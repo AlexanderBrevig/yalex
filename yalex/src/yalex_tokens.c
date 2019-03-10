@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "yalex_tokens.h"
+#include "yalex_parse.h"
 
 void token_add_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
@@ -70,7 +71,7 @@ void token_print_exec(yalex_world *world, stack_item **out) {
 
 void token_peek_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
-    numeric_type* addr = out[0]->data.number;
+    numeric_type* addr = (numeric_type*)out[0]->data.number;
     SP.data.number = (numeric_type) (*addr); //cast address to pointer, then deref
     SP.meta = YALEX_TOKEN_NUM;
 }
@@ -182,4 +183,13 @@ void token_regget_exec(yalex_world *world, stack_item **out) {
 
 void token_clr_exec(yalex_world *world, stack_item **out) {
     yalex_init(world, world->onResultCallback);
+}
+
+void token_run_exec(yalex_world *world, stack_item **out) {
+    char *prog = out[0]->data.text;
+    if (prog[0] == '"') {
+        prog++;
+        prog[strlen(prog) - 1 ] = 0;
+        yalex_parse(world, prog);
+    }
 }
