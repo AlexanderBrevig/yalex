@@ -450,6 +450,11 @@ void test_fault_err_clears_owned_items(void) {
     TEST_ASSERT_EQUAL_UINT8(0, world.sp);
     TEST_ASSERT_EQUAL_INT8_MESSAGE(3, messageCallbacks, "3 -> ERROR token cause");
 }
+void test_fault_err_lambda_too_long(void) {
+    yalex_repl(&world, ":tooLong (1 2 3 4 5 6 7 8 9 10 1 2 3 4 5 6 7 8 9 10 1 2 3 4 5 6 7 8 9 10 1 2 3 4 5 6 7 8 9 10 1 2 3 4 5 6 7 8 9 10 1 2 3 4 5 6 7 8 9 10)");
+    TEST_ASSERT_EQUAL_UINT8(0, world.sp);
+    TEST_ASSERT_EQUAL_STRING("ERROR_LAMBDA_STACK_TOO_LONG", world.lambdas[0].stack);
+}
 
 void test_fibonacci(void) {
     yalex_repl(&world, ":fibstep (R1R R2R + R3S pop R2R R1S pop R3R R2S pop R4R 1 + R4S pop rec)");
@@ -531,6 +536,7 @@ int main() {
     RUN_TEST(test_fault_double_space);
     RUN_TEST(test_fault_remove_interpreted);
     RUN_TEST(test_fault_err_clears_owned_items);
+    RUN_TEST(test_fault_err_lambda_too_long);
 
     RUN_TEST(test_fibonacci);
     int ret = UNITY_END();
