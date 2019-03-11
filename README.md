@@ -1,18 +1,20 @@
 # yalex
 
-> yalex is a minimalist functional scripting language for embedded systems
+> yalex is a minimalist [configurable](CONFIG.md) functional scripting language for embedded systems
 
-Yet Another LEXer. Also, I'm Alex.
+Yet Another LEXer.
+
 It's worth noting that y is kind of similar to lambda which is popular for indicating a functional programming language.
 What else? To lex is the process of taking text and convert it to tokens. Guess what, yalex does this too!
 
 Yalex uses the reverse polish notation and FORTH as it's main source of inspiration. (I learned about FORTH after I started this project)
 
-You always build up a stack of things and can use operators to modify said stack - and of course produce effects. In yalex, these operators are functions and one function can be the operand of another.
+You always build up a stack of things and can use operators to modify said stack - and of course produce effects. 
+In yalex, these operators are functions and one function can be the operand of another.
 
 ## Get the code and start to play
 
-	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex/
+	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex
 
 ## Tested functionality
 
