@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "..\Unity\src\unity.h"
-#include "..\src\yalex.h"
+#include "../Unity/src/unity.h"
+#include "../src/yalex.h"
 
 #define TEST_ASSERT_SP_META_IS(META) TEST_ASSERT_EQUAL_INT8_MESSAGE(world.stack[world.sp].meta, YALEX_TOKEN_##META, "Expected " #META " on stack")
 
@@ -191,10 +191,10 @@ void test_basic_op_peek(void) {
     numeric_type *pt = &x;
     char addr[16];
     address_type y = (address_type) &x;
-    sprintf_s(addr, 16, "%lld", y);
+    sprintf(addr, "%lld", y);
     char prog[128] = { 0 };
-    strcat_s(prog, 128, addr);
-    strcat_s(prog, 128, " peek");
+    strcat(prog, addr);
+    strcat(prog, " peek");
     numeric_type *p = (numeric_type*) y;
     TEST_ASSERT_EQUAL_INT8(x, *p);
     yalex_repl(&world, prog); //something like `923514 peek`
