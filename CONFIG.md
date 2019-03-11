@@ -1,9 +1,9 @@
-#CONFIG
+# CONFIG
 
 You can override these to customize the `yalex` runtime to suit your needs.
 This will heavily impact memory footprint.
 
-##Runtime resource management
+## Runtime resource management
 Let's define a system suitable for embedded devices.
 
     #define YALEX_SIZE_STACK 10
@@ -31,7 +31,7 @@ Let's define a system suitable for embedded devices.
         Configure how deep the requirements listing for tokens can be. 
         Internally, nothing depends on more than 2
 
-##Type dependent defines
+## Type dependent defines
 Let's take a look at one possible configuration using stdlib stuff.
 
     #define YALEX_NUMERIC_TYPE int
