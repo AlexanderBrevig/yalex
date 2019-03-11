@@ -153,10 +153,10 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
         buf[0] = 0;
         print[0] = 0;
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, "R");
-        YALEX_NUM_TO_STR((numeric_type)i, buf);
+        YALEX_NUM_TO_STR((numeric_type)i, buf, 10);
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, buf);
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, ":\t");
-        YALEX_NUM_TO_STR(world->registers[i], buf);
+        YALEX_NUM_TO_STR(world->registers[i], buf, 10);
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, buf);
 
         yalex_print_str(world, print);
@@ -168,7 +168,7 @@ void token_reg_err(yalex_world *world, numeric_type idx) {
     buf[0] = 0;
     YALEX_STRCAT(buf, 22, "No such register ");
     char nbuf[4];
-    YALEX_NUM_TO_STR(idx, nbuf);
+    YALEX_NUM_TO_STR(idx, nbuf, 10);
     YALEX_STRCAT(buf, 22, nbuf);
     yalex_print_err(world, buf);
 }

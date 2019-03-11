@@ -8,9 +8,8 @@ yalex_sys *yalex_system(void) {
 }
 
 char yalex_system_token_register(const char* token, char *requirements, char requirementCount, tokenExec exec) {
-    if (yalex_system()->tokenCount + 1 >= YALEX_SIZE_TOKENS) return 0;
+    if (yalex_system()->tokenCount >= YALEX_SIZE_TOKENS) return 0;
     yalex_system()->tokens[yalex_system()->tokenCount].token = token;
-    yalex_system()->tokens[yalex_system()->tokenCount].requirementCount = requirementCount;
     for (int i = 0; i < YALEX_SIZE_MAX_DEPENDABLE_STACK; i++) {
         yalex_system()->tokens[yalex_system()->tokenCount].requirements[i] = -1;
     }
@@ -18,6 +17,7 @@ char yalex_system_token_register(const char* token, char *requirements, char req
         YALEX_STRCPY(yalex_system()->tokens[yalex_system()->tokenCount].requirements, requirementCount, requirements);
     }
     yalex_system()->tokens[yalex_system()->tokenCount].exec = exec;
+    yalex_system()->tokens[yalex_system()->tokenCount].requirementCount = requirementCount;
     yalex_system()->tokenCount++;
     return yalex_system()->tokenCount;
 }
@@ -28,6 +28,7 @@ void yalex_system_lambda_init(lambda *lm, const char* name, const char* stack) {
 }
 
 void yalex_system_init(void) {
+    yalex_system()->tokenCount = 0;
     /// Configure tokens
     char basic_op_req[2] = { YALEX_TOKEN_NUM, YALEX_TOKEN_NUM };
     yalex_system_token_register("+", basic_op_req, 2, token_add_exec);

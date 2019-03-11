@@ -59,8 +59,9 @@ void * yalex_memset(void *s, int c, unsigned int n) {
     return s;
 }
 
-void yalex_lltoa_s(long long num, char buf[21]) {
+void yalex_lltoa_s(long long num, char buf[21], char radix) {
     if (buf == 0) return;
+    radix = 10; //unused
     char str[21];
     int i = 0;
     char isNegative = 0;
@@ -127,7 +128,8 @@ void yalex_lltoa_s(long long num, char buf[21]) {
  */
 
  //https://github.com/gcc-mirror/gcc/blob/master/libiberty/strtoll.c
-long long yalex_atoll_s(const char buf[22], int radix) {
+long long yalex_atoll_s(const char *buf, char **end, int radix) {
+    end = 0;
     register const char *s = buf;
     register unsigned long long acc;
     register int c;

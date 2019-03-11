@@ -75,7 +75,7 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
                 state->token[0] = 0;
                 YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR, "$");
                 char buf[YALEX_SIZE_TOKEN_STR - 1];
-                YALEX_NUM_TO_STR(world->lm - 1, buf);
+                YALEX_NUM_TO_STR(world->lm - 1, buf, 10);
                 YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR, buf);
                 YALEX_STRCPY(lmcpy->name, YALEX_SIZE_TOKEN_STR, state->token);
                 yalex_parse_token_push_stack(world, state->token, 0); //push anonymous lambda as token
@@ -130,9 +130,9 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
         if ((tokenIsNumber && token[0] != '-')
             || (tokenIsNumber && token[0] == '-' && YALEX_STRLEN(token) > 1)) {
             SP.meta = YALEX_TOKEN_NUM;
-            SP.data.number = YALEX_STR_TO_NUM(token, 10);
+            SP.data.number = YALEX_STR_TO_NUM(token, 0, 10);
         } else if (token[0] == '0' && token[1] == 'x') {
-            numeric_type number = YALEX_STR_TO_NUM(token, 16);
+            numeric_type number = YALEX_STR_TO_NUM(token, 0, 16);
             SP.meta = YALEX_TOKEN_NUM;
             SP.data.number = number;
         } else {
@@ -174,7 +174,7 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
 }
 
 void yalex_parse(yalex_world *world, const char* repltext) {
-    char *code = repltext;
+    char *code = (char*)repltext;
     lambda lm;
     parse_state parseState;
     yalex_parse_state_init(&parseState);
