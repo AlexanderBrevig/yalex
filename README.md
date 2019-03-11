@@ -137,6 +137,7 @@ Here it is, side by side a similar C implementation:
 	#include <string.h>
 
 	#include "yalex.h"
+    #include "yalex_system.h"
 	
 	void replMessageCallback(const char* ptr) { printf("%s\n", ptr); }
 
