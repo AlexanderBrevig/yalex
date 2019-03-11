@@ -36,6 +36,7 @@ I pledge to try and keep this TODO up to date with actual code.
 - [ ] measure speed and memory footprint
 - [ ] optimize speed and memory footprint
 - [ ] test on STM32, Nordic, TI and Arduino Uno
+- [ ] emscripten online demo/playground
 
 ## UNLIKELY
 
