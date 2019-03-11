@@ -42,7 +42,7 @@ typedef struct _lambda {
     char stack[YALEX_SIZE_LAMBDA_STACK_STR];
 } lambda;
 
-typedef struct _microlang_world {
+typedef struct _yalex_world {
     onResult onResultCallback;
     stack_item stack[YALEX_SIZE_STACK];
     lambda lambdas[YALEX_SIZE_LAMBDAS_STACK];
