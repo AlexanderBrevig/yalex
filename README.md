@@ -15,6 +15,7 @@ In yalex, these operators are functions and one function can be the operand of a
 ## Get the code and start to play
 
 	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex
+	cd yalex
 	cmake .
 	make
 	
