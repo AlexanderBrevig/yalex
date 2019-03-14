@@ -1,6 +1,10 @@
 #ifndef YALEX_CONFIG_H
 #define YALEX_CONFIG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef YALEX_NUMERIC_TYPE
 #define YALEX_NUMERIC_TYPE long long
 #endif
@@ -66,4 +70,7 @@
 #define YALEX_SIZE_REGISTERS 16
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 #endif

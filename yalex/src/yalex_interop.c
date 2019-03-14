@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex_interop.h"
 
 int yalex_strlen(const char * str) {
@@ -195,3 +199,7 @@ long long yalex_atoll_s(const char *buf, char **end, int radix) {
     }
     return (long long) acc;
 }
+
+#ifdef __cplusplus
+}
+#endif

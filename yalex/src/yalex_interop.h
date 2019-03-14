@@ -1,6 +1,10 @@
 #ifndef YALEX_INTEROP_H
 #define YALEX_INTEROP_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define YALEX_LLONG_MAX (0x7FFFFFFFFFFFFFFF)
 #define YALEX_LLONG_MIN (0x8000000000000000)
 
@@ -16,4 +20,7 @@ void * yalex_memset(void *s, int c, unsigned int n);
 long long yalex_atoll_s(const char *buf, char **end, int radix);
 void yalex_lltoa_s(long long num, char buf[22], char radix);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

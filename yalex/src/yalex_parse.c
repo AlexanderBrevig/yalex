@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex_parse.h"
 #include "yalex_tokens.h"
 #include "yalex_interpret.h"
@@ -227,3 +231,6 @@ void yalex_lambda_copy(lambda *to, lambda *from) {
     YALEX_STRCPY(to->stack, YALEX_SIZE_LAMBDA_STACK_STR, from->stack);
     to->requirementCount = from->requirementCount;
 }
+#ifdef __cplusplus
+}
+#endif

@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex_tokens.h"
 #include "yalex_parse.h"
 
@@ -67,7 +71,7 @@ void token_print_exec(yalex_world *world, stack_item **out) {
 
 void token_peek_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
-    numeric_type* addr = (numeric_type*)out[0]->data.number;
+    numeric_type* addr = (numeric_type*) out[0]->data.number;
     SP.data.number = (numeric_type) (*addr); //cast address to pointer, then deref
     SP.meta = YALEX_TOKEN_NUM;
 }
@@ -76,10 +80,10 @@ void token_select_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
     // since the "true" stack item is at index 1, and "false" at 0 - we can just use the bool check as index
     char truthy = ((out[2]->meta == YALEX_TOKEN_NUM && out[2]->data.number != 0)
-                   || (out[2]->meta == YALEX_TOKEN_NAN && YALEX_STRLEN(out[2]->data.text) > 0));
+                    || (out[2]->meta == YALEX_TOKEN_NAN && YALEX_STRLEN(out[2]->data.text) > 0));
 
     SP.meta = out[truthy]->meta;
-    
+
     if (SP.meta == YALEX_TOKEN_NUM) {
         SP.data.number = out[truthy]->data.number;
     } else if (SP.meta == YALEX_TOKEN_LAMBDA_DEFERRED) {
@@ -153,7 +157,7 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
         buf[0] = 0;
         print[0] = 0;
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, "R");
-        YALEX_NUM_TO_STR((numeric_type)i, buf, 10);
+        YALEX_NUM_TO_STR((numeric_type) i, buf, 10);
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, buf);
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, ":\t");
         YALEX_NUM_TO_STR(world->registers[i], buf, 10);
@@ -202,9 +206,12 @@ void token_run_exec(yalex_world *world, stack_item **out) {
     char *prog = out[0]->data.text;
     if (prog[0] == '"') {
         prog++;
-        prog[YALEX_STRLEN(prog) - 1 ] = 0;
+        prog[YALEX_STRLEN(prog) - 1] = 0;
         char buf[YALEX_SIZE_TOKEN_STR];
         YALEX_STRCPY(buf, YALEX_SIZE_TOKEN_STR, prog);
         yalex_parse(world, buf);
     }
 }
+#ifdef __cplusplus
+}
+#endif

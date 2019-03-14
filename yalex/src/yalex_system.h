@@ -1,6 +1,10 @@
 #ifndef YALEX_SYSTEM_H
 #define YALEX_SYSTEM_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex.h"
 
 typedef void(*tokenExec)(yalex_world *world, stack_item **out);
@@ -24,4 +28,7 @@ yalex_sys *yalex_system(void);
 void yalex_system_init(void);
 char yalex_system_token_register(const char* token, char *requirements, char requirementCount, tokenExec exec);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

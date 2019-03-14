@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex_system.h"
 #include "yalex_tokens.h"
 #include "yalex_parse.h"
@@ -71,3 +75,6 @@ void yalex_system_init(void) {
     yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "true", "(1)");
     yalex_system_lambda_init(&yalex_system()->lambdas[idx++], "false", "(0)");
 }
+#ifdef __cplusplus
+}
+#endif

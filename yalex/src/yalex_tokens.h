@@ -1,6 +1,10 @@
 #ifndef YALEX_TOKENS_H
 #define YALEX_TOKENS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex.h"
 
 void token_add_exec(yalex_world *world, stack_item **out);
@@ -27,4 +31,7 @@ void token_regget_exec(yalex_world *world, stack_item **out);
 void token_clr_exec(yalex_world *world, stack_item **out);
 void token_run_exec(yalex_world *world, stack_item **out);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

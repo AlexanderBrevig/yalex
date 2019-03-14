@@ -1,6 +1,10 @@
 #ifndef YALEX_PARSE_H
 #define YALEX_PARSE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex.h"
 
 #pragma pack(push, 1)
@@ -25,5 +29,7 @@ void yalex_parse(yalex_world *world, const char* repltext);
 void yalex_lambda_init(lambda *lm);
 void yalex_lambda_copy(lambda *to, lambda *from);
 
-
+#ifdef __cplusplus
+}
+#endif
 #endif

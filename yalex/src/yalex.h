@@ -1,6 +1,10 @@
 #ifndef YALEX_H
 #define YALEX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex_interop.h"
 #include "yalex_config.h"
 
@@ -67,4 +71,8 @@ void yalex_stack_item_clear(stack_item *popped);
 void yalex_repl(yalex_world *world, const char* repltext);
 
 void yalex_init(yalex_world *world, onResult cb);
+
+#ifdef __cplusplus
+}
+#endif
 #endif

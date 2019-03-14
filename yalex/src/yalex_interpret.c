@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "yalex_interpret.h"
 #include "yalex_parse.h"
 #include "yalex_system.h"
@@ -111,3 +115,6 @@ void yalex_interpret_sp(yalex_world *world) {
     }
     //getchar();
 }
+#ifdef __cplusplus
+}
+#endif
