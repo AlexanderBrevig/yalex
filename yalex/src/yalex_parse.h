@@ -9,7 +9,12 @@ extern "C" {
 
 #pragma pack(push, 1)
 typedef struct _parse_state {
+
+    #ifndef YALEX_DO_NOT_RESERVE_MEMORY
     char token[YALEX_SIZE_TOKEN_STR];
+    #else
+    char *token;
+    #endif
     char tokenIsNumber;
     unsigned char tokenIdx;
     lambda *lmnew;

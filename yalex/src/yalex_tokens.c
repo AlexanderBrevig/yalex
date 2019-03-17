@@ -81,7 +81,11 @@ void token_select_exec(yalex_world *world, stack_item **out) {
     // since the "true" stack item is at index 1, and "false" at 0 - we can just use the bool check as index
     char truthy = ((out[2]->meta == YALEX_TOKEN_NUM && out[2]->data.number != 0)
                     || (out[2]->meta == YALEX_TOKEN_NAN && YALEX_STRLEN(out[2]->data.text) > 0));
-
+    #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+    if (SP.meta == YALEX_TOKEN_NUM && out[truthy]->meta != YALEX_TOKEN_NUM) {
+        SP.data.text = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+    }
+    #endif
     SP.meta = out[truthy]->meta;
 
     if (SP.meta == YALEX_TOKEN_NUM) {
@@ -136,24 +140,36 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
     yalex_print_str(world, "LAMBDAS:");
     for (unsigned char i = 0; i < YALEX_SIZE_LAMBDAS_STACK; i++) {
         if (world->lambdas[i].name[0] == 0) continue;
-        #define MICROLANG_PRE_AND_POST_SIZE__TEMP 4
-        #define MICROLANG_BUF_SIZE__TEMP (YALEX_SIZE_TOKEN_STR + YALEX_SIZE_LAMBDA_STACK_STR + MICROLANG_PRE_AND_POST_SIZE__TEMP)
+        #define YALEX_PRE_AND_POST_SIZE__TEMP 4
+        #define YALEX_BUF_SIZE__TEMP (YALEX_SIZE_TOKEN_STR + YALEX_SIZE_LAMBDA_STACK_STR + YALEX_PRE_AND_POST_SIZE__TEMP)
         const char * prefix = "=>(";
         const char * postfix = ")";
-        char buf[MICROLANG_BUF_SIZE__TEMP];
+        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
+        char buf[YALEX_BUF_SIZE__TEMP];
+        #else
+        char *buf = (char*) YALEX_MALLOC(YALEX_BUF_SIZE__TEMP);
+        #endif
         buf[0] = 0;
-        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, world->lambdas[i].name);
-        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, prefix);
-        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, world->lambdas[i].stack);
-        YALEX_STRCAT(buf, MICROLANG_BUF_SIZE__TEMP, postfix);
+        YALEX_STRCAT(buf, YALEX_BUF_SIZE__TEMP, world->lambdas[i].name);
+        YALEX_STRCAT(buf, YALEX_BUF_SIZE__TEMP, prefix);
+        YALEX_STRCAT(buf, YALEX_BUF_SIZE__TEMP, world->lambdas[i].stack);
+        YALEX_STRCAT(buf, YALEX_BUF_SIZE__TEMP, postfix);
         yalex_print_str(world, buf);
-        #undef MICROLANG_BUF_SIZE__TEMP
-        #undef MICROLANG_PRE_AND_POST_SIZE__TEMP
+        #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+        YALEX_FREE(buf);
+        #endif
+        #undef YALEX_BUF_SIZE__TEMP
+        #undef YALEX_PRE_AND_POST_SIZE__TEMP
     }
     yalex_print_str(world, "REGISTERS:");
     for (unsigned char i = 0; i < YALEX_SIZE_REGISTERS; i++) {
+        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         char buf[YALEX_SIZE_TOKEN_STR];
         char print[YALEX_SIZE_TOKEN_STR + 10];
+        #else
+        char *buf = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+        char *print = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR + 10);
+        #endif
         buf[0] = 0;
         print[0] = 0;
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, "R");
@@ -164,6 +180,10 @@ void token_dump_exec(yalex_world *world, stack_item **out) {
         YALEX_STRCAT(print, YALEX_SIZE_TOKEN_STR + 4, buf);
 
         yalex_print_str(world, print);
+        #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+        YALEX_FREE(buf);
+        YALEX_FREE(print);
+        #endif
     }
     yalex_print_str(world, "/DUMP");
 }
@@ -190,9 +210,13 @@ void token_regget_exec(yalex_world *world, stack_item **out) {
     unsigned char idx = name[1] - '0';
     if (idx < YALEX_SIZE_REGISTERS && idx >= 0) {
         yalex_stack_push_sp(world);
+        #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+        if (SP.meta == YALEX_TOKEN_NAN) {
+            YALEX_FREE(SP.data.text);
+        }
+        #endif
         SP.meta = YALEX_TOKEN_NUM;
         SP.data.number = world->registers[idx];
-        //microlang_push_sp(world);
     } else {
         token_reg_err(world, idx);
     }
@@ -207,9 +231,16 @@ void token_run_exec(yalex_world *world, stack_item **out) {
     if (prog[0] == '"') {
         prog++;
         prog[YALEX_STRLEN(prog) - 1] = 0;
+        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         char buf[YALEX_SIZE_TOKEN_STR];
+        #else
+        char *buf = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+        #endif
         YALEX_STRCPY(buf, YALEX_SIZE_TOKEN_STR, prog);
         yalex_parse(world, buf);
+        #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+        YALEX_FREE(buf);
+        #endif
     }
 }
 #ifdef __cplusplus

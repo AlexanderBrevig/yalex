@@ -20,6 +20,12 @@ extern "C" {
 #define YALEX_LAMBDA_POINTER_TYPE unsigned char
 #endif
 
+#ifndef YALEX_MALLOC
+#define YALEX_MALLOC malloc  
+#endif
+#ifndef YALEX_FREE
+#define YALEX_FREE free  
+#endif
 #ifndef YALEX_STRCPY
 #define YALEX_STRCPY yalex_strcpy  
 #endif
@@ -42,7 +48,7 @@ extern "C" {
 #define YALEX_STR_TO_NUM yalex_atoll_s
 #endif
 
-
+#ifndef YALEX_DO_NOT_RESERVE_MEMORY
 #ifndef YALEX_SIZE_STACK
 #define YALEX_SIZE_STACK 100
 #endif
@@ -68,6 +74,10 @@ extern "C" {
 #endif
 #ifndef YALEX_SIZE_REGISTERS
 #define YALEX_SIZE_REGISTERS 16
+#endif
+#else
+#include "yalex_globals.h"
+#include <stdlib.h>
 #endif
 
 #ifdef __cplusplus

@@ -13,7 +13,15 @@ yalex_sys *yalex_system(void) {
 
 char yalex_system_token_register(const char* token, char *requirements, char requirementCount, tokenExec exec) {
     if (yalex_system()->tokenCount >= YALEX_SIZE_TOKENS) return 0;
+
+    #ifndef YALEX_DO_NOT_RESERVE_MEMORY
     yalex_system()->tokens[yalex_system()->tokenCount].token = token;
+    #else
+    YALEX_STRCPY(yalex_system()->tokens[yalex_system()->tokenCount].token,
+                 YALEX_SIZE_TOKEN_STR,
+                 token);
+    #endif
+
     for (int i = 0; i < YALEX_SIZE_MAX_DEPENDABLE_STACK; i++) {
         yalex_system()->tokens[yalex_system()->tokenCount].requirements[i] = -1;
     }

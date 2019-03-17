@@ -11,6 +11,7 @@ void yalex_parse_state_init(parse_state *state) {
     state->lambdaParseName = 0;
     state->tokenIsNumber = 1;
     state->tokenIdx = 0;
+    state->token[0] = 0;
     state->lambdaStackIdx = 0;
     YALEX_MEMSET(state->token, 0, YALEX_SIZE_TOKEN_STR);
     state->lmnew = 0;
@@ -78,11 +79,21 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
             } else {
                 state->token[0] = 0;
                 YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR, "$");
-                char buf[YALEX_SIZE_TOKEN_STR - 1];
+                
+                #ifndef YALEX_DO_NOT_RESERVE_MEMORY
+                char buf[YALEX_SIZE_TOKEN_STR-1];
+                #else
+                char* buf = (char *) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR-1);
+                #endif
+                
                 YALEX_NUM_TO_STR(world->lm - 1, buf, 10);
-                YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR, buf);
-                YALEX_STRCPY(lmcpy->name, YALEX_SIZE_TOKEN_STR, state->token);
+                YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR-1, buf);
+                YALEX_STRCPY(lmcpy->name, YALEX_SIZE_TOKEN_STR-1, state->token);
                 yalex_parse_token_push_stack(world, state->token, 0); //push anonymous lambda as token
+                
+                #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+                YALEX_FREE(buf);
+                #endif
             }
             yalex_parse_state_init(state);
         } else {
@@ -133,18 +144,28 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
         yalex_stack_push_sp(world);
         if ((tokenIsNumber && token[0] != '-')
             || (tokenIsNumber && token[0] == '-' && YALEX_STRLEN(token) > 1)) {
+            #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+            if (SP.meta == YALEX_TOKEN_NAN) {
+                YALEX_FREE(SP.data.text); 
+            }
+            #endif
             SP.meta = YALEX_TOKEN_NUM;
             SP.data.number = YALEX_STR_TO_NUM(token, 0, 10);
         } else if (token[0] == '0' && token[1] == 'x') {
             numeric_type number = YALEX_STR_TO_NUM(token, 0, 16);
+            #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+            if (SP.meta == YALEX_TOKEN_NAN) {
+                YALEX_FREE(SP.data.text);
+            }
+            #endif
             SP.meta = YALEX_TOKEN_NUM;
             SP.data.number = number;
         } else {
             SP.meta = YALEX_TOKEN_NAN;
-
             for (int i = 0; i < yalex_system()->tokenCount; i++) {
                 if (YALEX_STRCMP(token, yalex_system()->tokens[i].token) == 0
                     || (YALEX_STRCMP(yalex_system()->tokens[i].token, "*") > 0 && token[0] == 'R')) {
+                    
                     SP.meta = YALEX_TOKEN_EVAL;
                 }
             }
@@ -169,7 +190,14 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
             if (token[0] == '$') {
                 SP.meta = YALEX_TOKEN_LAMBDA;
             }
+            #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+            //if (!SP.data.text) {
+                SP.data.text = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+            //}
+            #endif
             YALEX_STRCPY(SP.data.text, YALEX_SIZE_TOKEN_STR, token);
+            char *nam = SP.data.text;
+            int x = 0;
         }
     }
     while (SP.meta == YALEX_TOKEN_EVAL || SP.meta == YALEX_TOKEN_LAMBDA) {
@@ -181,6 +209,18 @@ void yalex_parse(yalex_world *world, const char* repltext) {
     char *code = (char*)repltext;
     lambda lm;
     parse_state parseState;
+
+    #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+    lm.requirementCount = 0;
+    lm.name = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+    lm.name[0] = 0;
+    lm.requirements = (char*) YALEX_MALLOC(YALEX_SIZE_MAX_DEPENDABLE_STACK);
+    lm.requirements[0] = 0;
+    lm.stack = (char*) YALEX_MALLOC(YALEX_SIZE_LAMBDA_STACK_STR);
+    lm.stack[0] = 0;
+    parseState.token = (char *) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+    parseState.token[0] = 0;
+    #endif
     yalex_parse_state_init(&parseState);
     while (*code) {
         if (*code == '\t' || *code == '\r' || *code == '\n') {
@@ -216,6 +256,13 @@ void yalex_parse(yalex_world *world, const char* repltext) {
         code++;
     }
     yalex_parse_token_push_stack(world, parseState.token, parseState.tokenIsNumber);
+
+    #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+    YALEX_FREE(lm.name);
+    YALEX_FREE(lm.requirements);
+    YALEX_FREE(lm.stack);
+    YALEX_FREE(parseState.token);
+    #endif
 }
 
 void yalex_lambda_init(lambda *lm) {

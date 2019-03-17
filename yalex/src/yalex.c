@@ -22,9 +22,16 @@ void yalex_print_str(yalex_world *world, const char *str) {
 }
 void yalex_print_token(yalex_world *world, stack_item *item) {
     if (item->meta == YALEX_TOKEN_NUM) {
+        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         char token[YALEX_SIZE_TOKEN_STR];
+        #else 
+        char *token = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
+        #endif
         YALEX_NUM_TO_STR(item->data.number, token, 10);
         world->onResultCallback(token);
+        #ifdef YALEX_DO_NOT_RESERVE_MEMORY
+        YALEX_FREE(token);
+        #endif
     } else {
         if (item->meta != YALEX_TOKEN_UNDEFINED) {
             world->onResultCallback(item->data.text);
@@ -52,7 +59,11 @@ void yalex_stack_push_sp(yalex_world *world) {
 }
 
 void yalex_stack_item_clear(stack_item *popped) {
+    #ifndef YALEX_DO_NOT_RESERVE_MEMORY
     popped->data.number = 0;
+    #else
+    //do nothing and expect system to clean up
+    #endif
     popped->meta = YALEX_TOKEN_UNDEFINED;
 }
 
@@ -73,7 +84,9 @@ void yalex_init(yalex_world *world, onResult cb) {
     world->onResultCallback = cb;
 
     for (unsigned int i = 0; i < YALEX_SIZE_STACK; i++) {
+        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         world->stack[i].data.number = 0;
+        #endif
         world->stack[i].meta = YALEX_TOKEN_UNDEFINED;
     }
 

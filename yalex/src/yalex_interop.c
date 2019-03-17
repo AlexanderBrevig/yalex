@@ -44,7 +44,9 @@ int yalex_strcmp(const char * a, const char * b) {
 }
 
 int yalex_strcpy(char * to, unsigned int size, const char * from) {
-    if (to == 0 || from == 0 || size == 0) return 0;
+    if (to == 0 || from == 0 || size == 0) {
+        return 0;
+    }
     unsigned int i = 0;
     while (i < size && from[i]) {
         to[i] = from[i];

@@ -11,9 +11,11 @@ extern "C" {
 typedef YALEX_NUMERIC_TYPE numeric_type;
 typedef YALEX_ADDRESS_TYPE address_type;
 
+#ifndef YALEX_DO_NOT_RESERVE_MEMORY
 #define YALEX_SIZE_SYS_LAMBDAS_STACK 5
-
-#define YALEX_SIZE_TOKENS 20 + YALEX_SIZE_USER_TOKENS
+#define YALEX_SIZE_SYSTEM_TOKENS 20
+#define YALEX_SIZE_TOKENS (YALEX_SIZE_SYSTEM_TOKENS + YALEX_SIZE_USER_TOKENS)
+#endif
 
 #define YALEX_TOKEN_UNDEFINED 0
 #define YALEX_TOKEN_NAN 1
@@ -35,22 +37,38 @@ typedef struct _stack_item {
     char meta;
     union {
         numeric_type number;
+        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         char text[YALEX_SIZE_TOKEN_STR];
+        #else
+        char *text;
+        #endif
     } data;
 } stack_item;
 
 typedef struct _lambda {
+    char requirementCount;
+    #ifndef YALEX_DO_NOT_RESERVE_MEMORY
     char name[YALEX_SIZE_TOKEN_STR];
     char requirements[YALEX_SIZE_MAX_DEPENDABLE_STACK];
-    char requirementCount;
     char stack[YALEX_SIZE_LAMBDA_STACK_STR];
+    #else
+    char *name;
+    char *requirements;
+    char *stack;
+    #endif
 } lambda;
 
 typedef struct _yalex_world {
     onResult onResultCallback;
+    #ifndef YALEX_DO_NOT_RESERVE_MEMORY
     stack_item stack[YALEX_SIZE_STACK];
     lambda lambdas[YALEX_SIZE_LAMBDAS_STACK];
     numeric_type registers[YALEX_SIZE_REGISTERS];
+    #else
+    stack_item *stack;
+    lambda *lambdas;
+    numeric_type *registers;
+    #endif
     YALEX_STACK_POINTER_TYPE sp;
     YALEX_LAMBDA_POINTER_TYPE lm;
     #ifdef YALEX_DEBUG
