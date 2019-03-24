@@ -19,7 +19,6 @@ script:
   # Check versions of gcc, g++ and cmake
   - gcc -v && cmake --version
   - cmake .
-  - ls -l
   - make
-  - cmake --build ./build --target all --
-  - ./build/bin/yalex_tests_app
+  - ls -l
+  - .../../bin/yalex_tests_app
