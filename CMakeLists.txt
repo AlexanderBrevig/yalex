@@ -21,7 +21,7 @@ add_definitions(-DYALEX_DEBUG)
 
 add_subdirectory(yalex/src)
 
-if(TARGET_GROUP STREQUAL release)
+if(TARGET_GROUP STREQUAL yalex)
   # add release deps here
 else() 
   include(CTest)

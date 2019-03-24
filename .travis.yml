@@ -1,0 +1,13 @@
+dist: trusty
+sudo: require
+
+language:
+  - c
+  
+copiler: gcc
+
+script:
+  - 
+  - cmake --build ./build --config Debug --target clean --
+  - cmake --build ./build --config Debug --target all -- -j 10
+  - ./build/bin/yalex_tests_app
