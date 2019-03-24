@@ -20,9 +20,9 @@ script:
   - gcc -v && cmake --version
   - cmake .
   - make
-  - ./yalex/tests/bin/yalex_tests_app
+  - ./bin/yalex_tests_app
   - ls -l
-  - cd build
+  - cd bin
   - ls -l
   - cd ..
   - cd yalex
