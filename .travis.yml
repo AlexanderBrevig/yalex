@@ -20,6 +20,7 @@ script:
   - gcc -v && cmake --version
   - cmake .
   - ls -l
+  - cat Makefile
   - make
   - cmake --build ./build --target all --
   - ./build/bin/yalex_tests_app
