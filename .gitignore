@@ -6,6 +6,15 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+DartConfiguration.tcl
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
