@@ -22,4 +22,5 @@ script:
   - make
   - ls -l
   - ls build -l
+  - which yalex_tests_app
   - .../../bin/yalex_tests_app
