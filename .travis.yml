@@ -20,4 +20,4 @@ script:
   - gcc -v && cmake --version
   - cmake .
   - make
-  - ./yalex/tests/yalex_tests_app
+  - ./yalex/tests/bin/yalex_tests_app
