@@ -1,4 +1,5 @@
 add_executable(yalex_tests_app yalex_tests.c)
+set_property(TARGET yalex_tests_app PROPERTY C_STANDARD 99)
 
 target_link_libraries(yalex_tests_app src unity)
 
