@@ -21,4 +21,5 @@ script:
   - cmake .
   - make
   - ls -l
+  - ls build -l
   - .../../bin/yalex_tests_app
