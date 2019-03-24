@@ -20,7 +20,4 @@ script:
   - gcc -v && cmake --version
   - cmake .
   - make
-  - ls -l
-  - ls build -l
-  - which yalex_tests_app
-  - .../../bin/yalex_tests_app
+  - ./yalex/tests/yalex_tests_app
