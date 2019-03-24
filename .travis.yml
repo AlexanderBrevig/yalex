@@ -14,18 +14,9 @@ copiler: gcc
 
 script:
   # Export CC and CXX to tell cmake which compiler to use
-  - mkdir build
   - export CC=/usr/bin/gcc
   # Check versions of gcc, g++ and cmake
   - gcc -v && cmake --version
   - cmake .
   - make
   - ./bin/yalex_tests_app
-  - ls -l
-  - cd bin
-  - ls -l
-  - cd ..
-  - cd yalex
-  - ls -l
-  - cd tests
-  - ls -l
