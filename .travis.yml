@@ -18,7 +18,7 @@ script:
   - export CC=/usr/bin/gcc
   # Check versions of gcc, g++ and cmake
   - gcc -v && cmake --version
-  - cmake .
-  - cmake --build ./build --config Debug --target clean --
-  - cmake --build ./build --config Debug --target all -- -j 10
-  - ./build/bin/yalex_tests_app
+  - sudo cmake .
+  - sudo cmake --build ./build --config Debug --target clean --
+  - sudo cmake --build ./build --config Debug --target all -- -j 10
+  - sudo ./build/bin/yalex_tests_app
