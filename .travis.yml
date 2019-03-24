@@ -20,5 +20,5 @@ script:
   - gcc -v && cmake --version
   - cmake .
   - cmake --build ./build --config Debug --target clean --
-  - cmake --build ./build --config Debug --target all -- -j 10
+  - cmake --build ./build --config Debug --target all --
   - ./build/bin/yalex_tests_app
