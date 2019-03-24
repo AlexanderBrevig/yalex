@@ -19,6 +19,6 @@ script:
   # Check versions of gcc, g++ and cmake
   - gcc -v && cmake --version
   - cmake .
-  - sudo cmake --build ./build --config Debug --target clean --
-  - sudo cmake --build ./build --config Debug --target all -- -j 10
-  - sudo ./build/bin/yalex_tests_app
+  - cmake --build ./build --config Debug --target clean --
+  - cmake --build ./build --config Debug --target all -- -j 10
+  - ./build/bin/yalex_tests_app
