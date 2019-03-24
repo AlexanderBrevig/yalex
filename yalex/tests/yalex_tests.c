@@ -541,7 +541,5 @@ int main() {
     RUN_TEST(test_fibonacci);
     int ret = UNITY_END();
 
-    getchar();
-
     return ret;
 }
