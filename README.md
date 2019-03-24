@@ -1,4 +1,5 @@
 # yalex
+[![Build Status](https://travis-ci.com/AlexanderBrevig/yalex.svg?branch=master)](https://travis-ci.com/AlexanderBrevig/yalex) 
 
 > yalex is a minimalist [configurable](CONFIG.md) functional scripting language for embedded systems
 
