@@ -6,10 +6,10 @@ language:
 
 copiler: gcc
 
-addons:
-  apt:
-    packages:
-      - cmake
+#addons:
+#  apt:
+#    packages:
+#      - cmake
 
 
 script:
@@ -18,7 +18,7 @@ script:
   - export CC=/usr/bin/gcc
   # Check versions of gcc, g++ and cmake
   - gcc -v && cmake --version
-  - sudo cmake .
+  - cmake .
   - sudo cmake --build ./build --config Debug --target clean --
   - sudo cmake --build ./build --config Debug --target all -- -j 10
   - sudo ./build/bin/yalex_tests_app
