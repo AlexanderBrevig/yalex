@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.7)
 project(yalex C)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+SET(CMAKE_C_FLAGS "-std=c99")
+
 SET(TARGET_GROUP production CACHE STRING "Build target")
 
 #add_definitions(/Wall) #VS2017 hackish
