@@ -21,3 +21,7 @@ script:
   - cmake .
   - make
   - ./yalex/tests/bin/yalex_tests_app
+  - cd yalex
+  - ls -l
+  - cd tests
+  - ls -l
