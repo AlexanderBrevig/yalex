@@ -20,13 +20,13 @@ add_definitions(-DYALEX_DEBUG)
 #add_definitions(-DYALEX_NUMERIC_TYPE=int)
 #add_definitions(-DYALEX_ADDRESS_TYPE=int)
 
-add_subdirectory(yalex/src)
+add_subdirectory(src)
 
 if(TARGET_GROUP STREQUAL yalex)
   # add release deps here
 else() 
   include(CTest)
-  add_subdirectory(yalex/Unity) 
-  add_subdirectory(yalex/tests) 
+  add_subdirectory(Unity) 
+  add_subdirectory(tests) 
 endif()
 
