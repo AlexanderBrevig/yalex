@@ -24,7 +24,7 @@ void yalex_print_token(yalex_world *world, stack_item *item) {
     if (item->meta == YALEX_TOKEN_NUM) {
         #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         char token[YALEX_SIZE_TOKEN_STR];
-        #else 
+        #else
         char *token = (char*) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR);
         #endif
         YALEX_NUM_TO_STR(item->data.number, token, 10);
@@ -45,7 +45,7 @@ stack_item * yalex_stack_pop_sp(yalex_world *world) {
     return ret;
 }
 
-void yalex_stack_push_sp(yalex_world *world) { 
+void yalex_stack_push_sp(yalex_world *world) {
     world->sp++;
     #ifdef YALEX_DEBUG
     if (world->sp > world->spMax) {
@@ -83,16 +83,16 @@ void yalex_init(yalex_world *world, onResult cb) {
     yalex_system()->tokenCount = 0;
     world->onResultCallback = cb;
 
+    #ifndef YALEX_DO_NOT_RESERVE_MEMORY
     for (unsigned int i = 0; i < YALEX_SIZE_STACK; i++) {
-        #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         world->stack[i].data.number = 0;
-        #endif
         world->stack[i].meta = YALEX_TOKEN_UNDEFINED;
     }
 
     for (unsigned int i = 0; i < YALEX_SIZE_REGISTERS; i++) {
         world->registers[i] = 0;
     }
+    #endif
 
     for (unsigned int i = 0; i < YALEX_SIZE_LAMBDAS_STACK; i++) {
         yalex_lambda_init(&world->lambdas[i]);
