@@ -71,8 +71,9 @@ void token_print_exec(yalex_world *world, stack_item **out) {
 
 void token_peek_exec(yalex_world *world, stack_item **out) {
     yalex_stack_push_sp(world);
-    numeric_type* addr = (numeric_type*) out[0]->data.number;
-    SP.data.number = (numeric_type) (*addr); //cast address to pointer, then deref
+    unsigned long long addr = (unsigned long long)out[0]->data.number;
+    numeric_type* target = addr;
+    SP.data.number = *target;
     SP.meta = YALEX_TOKEN_NUM;
 }
 
@@ -197,7 +198,8 @@ void token_reg_err(yalex_world *world, numeric_type idx) {
     yalex_print_err(world, buf);
 }
 void token_regset_exec(yalex_world *world, stack_item **out) {
-    numeric_type idx = out[0]->data.number;
+    //TODO make typedef for indexable types so they stay consistent
+    unsigned int idx = out[0]->data.number;
     if (idx < YALEX_SIZE_REGISTERS && idx >= 0) {
         world->registers[idx] = SP.data.number;
     } else {

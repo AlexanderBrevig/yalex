@@ -11,6 +11,8 @@ extern "C" {
 typedef YALEX_NUMERIC_TYPE numeric_type;
 typedef YALEX_ADDRESS_TYPE address_type;
 
+//TODO: remove
+#include "stdlib.h"
 #ifndef YALEX_DO_NOT_RESERVE_MEMORY
 #define YALEX_SIZE_SYS_LAMBDAS_STACK 5
 #define YALEX_SIZE_SYSTEM_TOKENS 20
@@ -36,6 +38,7 @@ typedef void(*onResult)(const char* result);
 typedef struct _stack_item {
     char meta;
     union {
+        void *pointer;
         numeric_type number;
         #ifndef YALEX_DO_NOT_RESERVE_MEMORY
         char text[YALEX_SIZE_TOKEN_STR];

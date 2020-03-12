@@ -79,18 +79,17 @@ char * yalex_parse_lambda_stack(yalex_world *world, parse_state *state, lambda *
             } else {
                 state->token[0] = 0;
                 YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR, "$");
-                
+
                 #ifndef YALEX_DO_NOT_RESERVE_MEMORY
                 char buf[YALEX_SIZE_TOKEN_STR-1];
                 #else
                 char* buf = (char *) YALEX_MALLOC(YALEX_SIZE_TOKEN_STR-1);
                 #endif
-                
+
                 YALEX_NUM_TO_STR(world->lm - 1, buf, 10);
                 YALEX_STRCAT(state->token, YALEX_SIZE_TOKEN_STR-1, buf);
                 YALEX_STRCPY(lmcpy->name, YALEX_SIZE_TOKEN_STR-1, state->token);
                 yalex_parse_token_push_stack(world, state->token, 0); //push anonymous lambda as token
-                
                 #ifdef YALEX_DO_NOT_RESERVE_MEMORY
                 YALEX_FREE(buf);
                 #endif
@@ -146,10 +145,11 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
             || (tokenIsNumber && token[0] == '-' && YALEX_STRLEN(token) > 1)) {
             #ifdef YALEX_DO_NOT_RESERVE_MEMORY
             if (SP.meta == YALEX_TOKEN_NAN) {
-                YALEX_FREE(SP.data.text); 
+                YALEX_FREE(SP.data.text);
             }
             #endif
             SP.meta = YALEX_TOKEN_NUM;
+            yalex_print_str(world, token);
             SP.data.number = YALEX_STR_TO_NUM(token, 0, 10);
         } else if (token[0] == '0' && token[1] == 'x') {
             numeric_type number = YALEX_STR_TO_NUM(token, 0, 16);
@@ -165,7 +165,6 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
             for (int i = 0; i < yalex_system()->tokenCount; i++) {
                 if (YALEX_STRCMP(token, yalex_system()->tokens[i].token) == 0
                     || (YALEX_STRCMP(yalex_system()->tokens[i].token, "*") > 0 && token[0] == 'R')) {
-                    
                     SP.meta = YALEX_TOKEN_EVAL;
                 }
             }
@@ -196,8 +195,6 @@ void yalex_parse_token_push_stack(yalex_world *world, const char* token, char to
             //}
             #endif
             YALEX_STRCPY(SP.data.text, YALEX_SIZE_TOKEN_STR, token);
-            char *nam = SP.data.text;
-            int x = 0;
         }
     }
     while (SP.meta == YALEX_TOKEN_EVAL || SP.meta == YALEX_TOKEN_LAMBDA) {
@@ -245,7 +242,7 @@ void yalex_parse(yalex_world *world, const char* repltext) {
                     } else {
                         // parse regular token if not currently parsing lambda stack
                         if (parseState.tokenIsNumber) {
-                            parseState.tokenIsNumber = (ISDIGIT(*code) || (parseState.tokenIdx == 0 && *code == '-'));
+                            parseState.tokenIsNumber = (ISDIGIT(*code) || (parseState.tokenIdx == 0 && *code == '-') || (parseState.tokenIdx > 0 && *code == '.'));
                         }
                         parseState.token[parseState.tokenIdx++] = *code;
                         parseState.token[parseState.tokenIdx] = 0;

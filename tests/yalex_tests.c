@@ -64,6 +64,14 @@ void test_parse_string(void) {
     TEST_ASSERT_EQUAL_STRING(testString, buffer);
     TEST_ASSERT_EQUAL_INT8(1, messageCallbacks);
 }
+void test_parse_float(void) {
+#define TYPENAME_NUM "##YALEX_NUMERIC_TYPE"
+    if(YALEX_STRCMP(TYPENAME_NUM, "float")){
+        TEST_ASSERT_EQUAL_INT8(1,1);
+    }else{
+        TEST_ASSERT_EQUAL_INT8(1,2);
+    }
+}
 
 void test_parse_echo_last_token_of_two(void) {
     yalex_repl(&world, "1 2");

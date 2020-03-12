@@ -65,8 +65,9 @@ void * yalex_memset(void *s, int c, unsigned int n) {
     return s;
 }
 
-void yalex_lltoa_s(long long num, char buf[21], char radix) {
-    if (buf == 0) return;
+#include "stdio.h"
+unsigned int yalex_lltoa_s(long long num, char buf[21], char radix) {
+    if (buf == 0) return 0;
     radix = 10; //unused
     char str[21];
     int i = 0;
@@ -76,31 +77,32 @@ void yalex_lltoa_s(long long num, char buf[21], char radix) {
     if (num == 0) {
         buf[i++] = '0';
         buf[i++] = '\0';
-        return;
+        return 1;
     }
 
-    // In standard itoa(), negative numbers are handled only with  
-    // base 10. Otherwise numbers are considered unsigned. 
+    // In standard itoa(), negative numbers are handled only with
+    // base 10. Otherwise numbers are considered unsigned.
     if (num < 0) {
         isNegative = 1;
         num = -num;
     }
 
-    // Process individual digits 
+    // Process individual digits
     while (num != 0 && i < 20) {
         char rem = num % 10;
         str[i++] = rem + '0';
         num = num / 10;
     }
 
-    // If number is negative, append '-' 
+    // If number is negative, append '-'
     if (isNegative)
         str[i++] = '-';
 
     for (int j = i; j > 0; --j) {
         buf[i - j] = str[j - 1];
     }
-    buf[i] = '\0'; // Append string terminator 
+    buf[i] = '\0'; // Append string terminator
+    return i;
 }
 
 /*-
@@ -200,6 +202,28 @@ long long yalex_atoll_s(const char *buf, char **end, int radix) {
         return -1 * ((long long) acc);
     }
     return (long long) acc;
+}
+//TODO: remove
+#include "stdlib.h"
+float yalex_atof(const char*buf, char**end, int radix) {
+    return atof(buf);
+}
+
+unsigned int yalex_ftoa(float num, char *buf, char radix){
+    unsigned int idx = yalex_lltoa_s((long long)num, buf, radix);
+    buf[idx++] = '.';
+    float decim = num - (long long)num;
+    decim *= 1000;
+    char decbuf[4];
+    decbuf[0]=0;
+    unsigned int add = yalex_lltoa_s((long long)decim, decbuf, radix);
+    char *d = &decbuf[0];
+    while (*d) {
+        buf[idx++] = *d;
+        d++;
+    }
+
+    return idx + 1 + add;
 }
 
 #ifdef __cplusplus

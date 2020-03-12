@@ -8,10 +8,10 @@ extern "C" {
 
 char yalex_interpret_token_find_symbol(yalex_world *world, const char *token, const char * require, stack_item **out, unsigned char tokens) {
     stack_item *wasSP = &world->stack[world->sp + 1];
-    if (wasSP->meta == YALEX_TOKEN_EVAL 
+    if (wasSP->meta == YALEX_TOKEN_EVAL
         &&
         (YALEX_STRCMP(wasSP->data.text, token) == 0
-            || 
+            ||
             (token[0] == 'R' && wasSP->data.text && token[2] == wasSP->data.text[2]))) {
         if (world->sp >= tokens) {
             if (*require != -1) { //check requirements if specified
@@ -60,7 +60,7 @@ char yalex_interpret_system_sp(yalex_world *world) {
                 switch (resolve) {
                     case YALEX_EVAL_ERR_STACK_SHALLOW: yalex_print_err(world, "Stack too shallow"); break;
                     case YALEX_EVAL_ERR_STACK_WRONG_TYPES: yalex_print_err(world, "Stack has wrong types"); break;
-                    default: 
+                    default:
                         break;
                 }
                 for (int r = 0; r < yalex_system()->tokens[i].requirementCount; r++) {
@@ -92,7 +92,7 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
                 }
                 yalex_parse(world, world->lambdas[i].stack);
                 found = 1;
-                return;
+                return 0;
             }
         }
         for (int i = 0; i < YALEX_SIZE_SYS_LAMBDAS_STACK; i++) {
@@ -100,7 +100,7 @@ char yalex_interpret_lambda_sp(yalex_world *world) {
                 yalex_stack_pop_sp(world);
                 yalex_parse(world, yalex_system()->lambdas[i].stack);
                 found = 1;
-                return;
+                return 0;
             }
         }
         if (found == 0) {

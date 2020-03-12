@@ -17,16 +17,18 @@ add_definitions(-DYALEX_DEBUG)
 #add_definitions(-DYALEX_SIZE_REGISTERS=8)
 #add_definitions(-DYALEX_SIZE_USER_TOKENS=0)
 #add_definitions(-DYALEX_SIZE_MAX_DEPENDABLE_STACK=2)
-#add_definitions(-DYALEX_NUMERIC_TYPE=int)
+add_definitions(-DYALEX_NUMERIC_TYPE=float)
+add_definitions(-DYALEX_NUM_TO_STR=yalex_ftoa)
+add_definitions(-DYALEX_STR_TO_NUM=yalex_atof)
 #add_definitions(-DYALEX_ADDRESS_TYPE=int)
 
 add_subdirectory(src)
 
 if(TARGET_GROUP STREQUAL yalex)
   # add release deps here
-else() 
+else()
   include(CTest)
-  add_subdirectory(Unity) 
-  add_subdirectory(tests) 
+  add_subdirectory(Unity)
+  add_subdirectory(tests)
 endif()
 
