@@ -15,13 +15,13 @@ In yalex, these operators are functions and one function can be the operand of a
 
 ## Get the code and start to play
 
-	git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex
-	cd yalex
-	cmake .
-	make
-	
-	./bin/yalex_tests_app
-	./bin/release
+    git clone --recurse-submodules https://github.com/AlexanderBrevig/yalex
+    cd yalex
+    cmake .
+    make
+
+    ./bin/yalex_tests_app
+    ./bin/release
 
 ## Tested functionality
 
@@ -32,33 +32,33 @@ In yalex, these operators are functions and one function can be the operand of a
         true false
         "some string"
 
-	BINARY OPERANDS FOR TWO NUMBERS:
+    BINARY OPERANDS FOR TWO NUMBERS:
         + - * /
-	    < > == !=
-	    || &&
+        < > == !=
+        || &&
 
     STACK OPERATIONS:
-	    dup push pop clr
+        dup push pop clr
         nop
         _ (alias of 'nop, must be resolved by select or resolve)
 
     MISCELLANEOUS:
-	    X print 
+        X print 
         dump
-	    NUM peek
-	    NUM 'yes 'no select
+        NUM peek
+        NUM 'yes 'no select
         "1 2 3" run
 
     LAMBDAS:
         'lambda resolve
-	    ()
-	    :lambda (1 1 +)
-	    lambda
-	    lambda:
+        ()
+        :lambda (1 1 +)
+        lambda
+        lambda:
 
     REGISTERS:
-	    NUM R[0..15]S
-	    R[0..15]R
+        NUM R[0..15]S
+        R[0..15]R
 
 ## Code example; fibonacci
 
@@ -87,10 +87,10 @@ Here it is, side by side a similar C implementation:
 
     void fibstep() {
         nextTerm = t1 + t2; // R1R R2R + R3S pop
-        t1 = t2;			// R2R R1S pop
-        t2 = nextTerm;		// R3R R2S pop
-        i++;				// R4R 1 + R4S pop
-        rec();				// rec
+        t1 = t2;            // R2R R1S pop
+        t2 = nextTerm;        // R3R R2S pop
+        i++;                // R4R 1 + R4S pop
+        rec();                // rec
     }
 
     void rec() {
@@ -134,43 +134,43 @@ Here it is, side by side a similar C implementation:
 
 ## Register custom C keyword
 
-	#include <stdio.h>
-	#include <string.h>
+    #include <stdio.h>
+    #include <string.h>
 
-	#include "yalex.h"
+    #include "yalex.h"
     #include "yalex_system.h"
-	
-	void replMessageCallback(const char* ptr) { printf("%s\n", ptr); }
 
-	// sample implementation of the && / and token
-	void sample_token_and_exec(yalex_world *world, stack_item **out) {
-		yalex_stack_push_sp(world);
-		//out gives you tokens down into the stack
-		//out[1] is the first token we wrote out[0] the second
-		SP.data.number = (out[1]->data.number && out[0]->data.number) ? 1 : 0;
-		SP.meta = YALEX_TOKEN_NUM;
-	}
+    void replMessageCallback(const char* ptr) { printf("%s\n", ptr); }
 
-	int main() {
-		//basic initialization of runtime
-		yalex_world world;
-		yalex_init(&world, replMessageCallback);
+    // sample implementation of the && / and token
+    void sample_token_and_exec(yalex_world *world, stack_item **out) {
+        yalex_stack_push_sp(world);
+        //out gives you tokens down into the stack
+        //out[1] is the first token we wrote out[0] the second
+        SP.data.number = (out[1]->data.number && out[0]->data.number) ? 1 : 0;
+        SP.meta = YALEX_TOKEN_NUM;
+    }
 
-		// in order for the `and` to work, we need two numbers to be on the stack
-		// types here https://github.com/AlexanderBrevig/yalex/blob/master/yalex/src/yalex.h#L71
-		char and_required_tokens[2] = { YALEX_TOKEN_NUM, YALEX_TOKEN_NUM };
-		//register a new system token
-		yalex_system_token_register("and", and_required_tokens, 2, sample_token_and_exec);
+    int main() {
+        //basic initialization of runtime
+        yalex_world world;
+        yalex_init(&world, replMessageCallback);
 
-		//test it!
-		yalex_repl(&world, "1 1 and"); //prints 1
-		yalex_repl(&world, "1 0 and"); //prints 0
-		
-		char word[YALEX_SIZE_REPL_STR];
-		while (1) {
-			word[0] = 0;
-			fgets(word, sizeof(word), stdin);
-			yalex_repl(&world, word);
-		}
-		return 0;
-	}
+        // in order for the `and` to work, we need two numbers to be on the stack
+        // types here https://github.com/AlexanderBrevig/yalex/blob/master/yalex/src/yalex.h#L71
+        char and_required_tokens[2] = { YALEX_TOKEN_NUM, YALEX_TOKEN_NUM };
+        //register a new system token
+        yalex_system_token_register("and", and_required_tokens, 2, sample_token_and_exec);
+
+        //test it!
+        yalex_repl(&world, "1 1 and"); //prints 1
+        yalex_repl(&world, "1 0 and"); //prints 0
+
+        char word[YALEX_SIZE_REPL_STR];
+        while (1) {
+            word[0] = 0;
+            fgets(word, sizeof(word), stdin);
+            yalex_repl(&world, word);
+        }
+        return 0;
+    }
